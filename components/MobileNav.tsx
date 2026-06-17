@@ -8,6 +8,7 @@ const links = [
   { href: '/dashboard/codes', label: 'Code de validation' },
   { href: '/dashboard/rewards', label: 'Récompenses' },
   { href: '/dashboard/redemptions', label: 'Demandes' },
+  { href: '/dashboard/campaigns', label: 'Campagnes' },
   { href: '/dashboard/qr-code', label: 'Mon QR code' },
   { href: '/dashboard/settings', label: 'Paramètres' },
 ]
