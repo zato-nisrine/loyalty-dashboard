@@ -41,6 +41,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <Link href="/dashboard/redemptions" className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50">
           Demandes
         </Link>
+        <Link href="/dashboard/qr-code" className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50">
+          Mon QR code
+        </Link>
         <Link href="/dashboard/settings" className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50">
           Paramètres
         </Link>
