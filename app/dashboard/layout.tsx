@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getRestaurant } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import MobileNav from '@/components/MobileNav'
+import SubscriptionBanner from '@/components/SubscriptionBanner'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const restaurant = await getRestaurant()
@@ -53,7 +54,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
       </aside>
 
       <div className="p-4 sm:p-6 lg:p-10">
-        <div className="mx-auto max-w-5xl">{children}</div>
+        <div className="mx-auto max-w-5xl">
+          <SubscriptionBanner
+            subscriptionStatus={restaurant.subscriptionStatus}
+            subscriptionExpiresAt={restaurant.subscriptionExpiresAt}
+          />
+          {children}
+        </div>
       </div>
     </div>
   )

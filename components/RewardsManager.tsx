@@ -2,7 +2,15 @@
 
 import { useState } from 'react'
 
-export default function RewardsManager({ initialRules, brandColor }: { initialRules: any[]; brandColor: string }) {
+export default function RewardsManager({
+  initialRules,
+  brandColor,
+  pointsPer100Fcfa,
+}: {
+  initialRules: any[]
+  brandColor: string
+  pointsPer100Fcfa: number
+}) {
   const [rules, setRules] = useState(initialRules)
   const [showForm, setShowForm] = useState(false)
   const [name, setName] = useState('')
@@ -10,6 +18,10 @@ export default function RewardsManager({ initialRules, brandColor }: { initialRu
   const [rewardDescription, setRewardDescription] = useState('')
   const [creating, setCreating] = useState(false)
   const [error, setError] = useState('')
+
+  const equivalentFcfa = pointsRequired
+    ? Math.round((Number(pointsRequired) / pointsPer100Fcfa) * 100)
+    : 0
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
@@ -124,6 +136,11 @@ export default function RewardsManager({ initialRules, brandColor }: { initialRu
               placeholder="100"
               className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm text-stone-900"
             />
+            {pointsRequired && (
+              <p className="text-xs text-stone-500">
+                Équivalent à environ <span className="font-medium text-stone-700">{equivalentFcfa.toLocaleString()} FCFA</span> de dépenses
+              </p>
+            )}
           </div>
           <div className="space-y-1">
             <label className="text-sm text-stone-600">Description</label>

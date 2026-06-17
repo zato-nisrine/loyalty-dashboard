@@ -22,7 +22,7 @@ export default async function RewardsPage() {
         <p className="mt-1 text-sm text-stone-500">Définissez les paliers de points et les récompenses associées</p>
       </div>
 
-      <RewardsManager initialRules={rules} brandColor={restaurant.brandColor} />
+      <RewardsManager initialRules={rules} brandColor={restaurant.brandColor} pointsPer100Fcfa={restaurant.pointsPer100Fcfa} />
     </div>
   )
 }
