@@ -1,6 +1,7 @@
 import { checkAdminAuth } from '@/lib/admin-auth'
 import { redirect } from 'next/navigation'
 import AdminLogoutButton from '@/components/AdminLogoutButton'
+import AdminMobileNav from '@/components/AdminMobileNav'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const isAdmin = await checkAdminAuth()
@@ -8,6 +9,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] lg:grid lg:grid-cols-[220px_1fr]">
+      <AdminMobileNav />
+
       <aside className="hidden border-r border-stone-200 bg-white px-5 py-7 lg:flex lg:flex-col lg:gap-1">
         <p className="mb-8 font-[family-name:var(--font-display)] text-lg font-semibold text-stone-900">
           Admin Fidèle
