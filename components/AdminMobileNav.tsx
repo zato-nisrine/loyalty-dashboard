@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export default function AdminMobileNav() {
   const router = useRouter()
@@ -17,7 +18,7 @@ export default function AdminMobileNav() {
     <>
       <header className="flex items-center justify-between border-b border-stone-200 bg-white px-4 py-3 lg:hidden">
         <p className="font-[family-name:var(--font-display)] text-base font-semibold text-stone-900">
-          Admin Fidèle
+          Admin Fidele
         </p>
         <button
           onClick={() => setOpen(true)}
@@ -45,25 +46,25 @@ export default function AdminMobileNav() {
               </button>
             </div>
             <nav className="flex flex-col gap-1">
-              
+              <Link
                 href="/admin/dashboard"
                 onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50"
               >
                 Vue globale
-              </a>
-              
+              </Link>
+              <Link
                 href="/admin/restaurants"
                 onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50"
               >
                 Restaurants
-              </a>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="mt-4 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-600 hover:bg-red-50"
               >
-                Déconnexion
+                Deconnexion
               </button>
             </nav>
           </div>
