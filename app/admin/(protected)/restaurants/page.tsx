@@ -1,6 +1,6 @@
 import { checkAdminAuth, getAdminSecret } from '@/lib/admin-auth'
 import { redirect } from 'next/navigation'
-import AdmincommercesList from '@/components/AdmincommercesList'
+import AdminRestaurantsList from '@/components/AdminRestaurantsList'
 
 export default async function AdmincommercesPage() {
   const isAdmin = await checkAdminAuth()
@@ -23,7 +23,7 @@ export default async function AdmincommercesPage() {
         <p className="mt-1 text-sm text-stone-500">{commerces.length} commerce(s) inscrit(s)</p>
       </div>
 
-      <AdmincommercesList initialcommerces={commerces} />
+      <AdminRestaurantsList initialcommerces={commerces} />
     </div>
   )
 }

@@ -1,9 +1,9 @@
-import { getcommerce, getToken } from '@/lib/auth'
+import { getRestaurant, getToken } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import LogoutButton from '@/components/LogoutButton'
 
 export default async function DashboardPage() {
-  const commerce = await getcommerce()
+  const commerce = await getRestaurant()
   if (!commerce) redirect('/login')
 
   const token = await getToken()

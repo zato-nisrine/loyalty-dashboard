@@ -1,9 +1,9 @@
-import { getcommerce } from '@/lib/auth'
+import { getRestaurant } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import CodeGenerator from '@/components/CodeGenerator'
 
 export default async function CodesPage() {
-  const commerce = await getcommerce()
+  const commerce = await getRestaurant()
   if (!commerce) redirect('/login')
 
   return (

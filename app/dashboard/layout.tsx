@@ -1,11 +1,11 @@
 import Link from 'next/link'
-import { getcommerce } from '@/lib/auth'
+import { getRestaurant } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import MobileNav from '@/components/MobileNav'
 import SubscriptionBanner from '@/components/SubscriptionBanner'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const commerce = await getcommerce()
+  const commerce = await getRestaurant()
   if (!commerce) redirect('/login')
 
   const brandColor = commerce.brandColor || '#C2410C'

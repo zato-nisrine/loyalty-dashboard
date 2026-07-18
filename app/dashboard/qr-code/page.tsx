@@ -1,9 +1,9 @@
-import { getcommerce } from '@/lib/auth'
+import { getRestaurant } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import QrCodeDisplay from '@/components/QrCodeDisplay'
 
 export default async function QrCodePage() {
-  const commerce = await getcommerce()
+  const commerce = await getRestaurant()
   if (!commerce) redirect('/login')
 
   const joinUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/join?token=${commerce.qrCodeToken}`

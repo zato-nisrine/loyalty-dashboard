@@ -1,9 +1,9 @@
-import { getcommerce, getToken } from '@/lib/auth'
+import { getRestaurant, getToken } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import RewardsManager from '@/components/RewardsManager'
 
 export default async function RewardsPage() {
-  const commerce = await getcommerce()
+  const commerce = await getRestaurant()
   if (!commerce) redirect('/login')
 
   const token = await getToken()
