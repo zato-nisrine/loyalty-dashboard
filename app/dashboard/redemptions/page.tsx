@@ -1,10 +1,10 @@
-import { getRestaurant, getToken } from '@/lib/auth'
+import { getcommerce, getToken } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import RedemptionsList from '@/components/RedemptionsList'
 
 export default async function RedemptionsPage() {
-  const restaurant = await getRestaurant()
-  if (!restaurant) redirect('/login')
+  const commerce = await getcommerce()
+  if (!commerce) redirect('/login')
 
   const token = await getToken()
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rewards/pending`, {
@@ -22,7 +22,7 @@ export default async function RedemptionsPage() {
         <p className="mt-1 text-sm text-stone-500">Confirmez ou refusez les demandes de récompense en attente</p>
       </div>
 
-      <RedemptionsList initialRedemptions={redemptions} brandColor={restaurant.brandColor} />
+      <RedemptionsList initialRedemptions={redemptions} brandColor={commerce.brandColor} />
     </div>
   )
 }

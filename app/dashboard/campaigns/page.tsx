@@ -1,10 +1,10 @@
-import { getRestaurant, getToken } from '@/lib/auth'
+import { getcommerce, getToken } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import CampaignsManager from '@/components/CampaignsManager'
 
 export default async function CampaignsPage() {
-  const restaurant = await getRestaurant()
-  if (!restaurant) redirect('/login')
+  const commerce = await getcommerce()
+  if (!commerce) redirect('/login')
 
   const token = await getToken()
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/campaigns`, {
@@ -31,7 +31,7 @@ export default async function CampaignsPage() {
           </p>
         </div>
       ) : (
-        <CampaignsManager initialCampaigns={campaigns} brandColor={restaurant.brandColor} />
+        <CampaignsManager initialCampaigns={campaigns} brandColor={commerce.brandColor} />
       )}
     </div>
   )

@@ -18,8 +18,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <a href="/admin/dashboard" className="rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50">
           Vue globale
         </a>
-        <a href="/admin/restaurants" className="rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50">
-          Restaurants
+        <a href="/admin/commerces" className="rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50">
+          commerces
         </a>
         <div className="mt-auto pt-6">
           <AdminLogoutButton />

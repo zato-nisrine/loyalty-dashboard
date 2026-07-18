@@ -35,7 +35,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
-        <h1 className="text-xl font-semibold text-neutral-900">Connexion restaurant</h1>
+        <h1 className="text-xl font-semibold text-neutral-900">Connexion commerce</h1>
 
         <div className="space-y-1">
           <label className="text-sm text-neutral-600">Email</label>

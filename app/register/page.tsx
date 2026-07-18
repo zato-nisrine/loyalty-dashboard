@@ -36,10 +36,10 @@ export default function RegisterPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-neutral-50 px-4">
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
-        <h1 className="text-xl font-semibold text-neutral-900">Inscription restaurant</h1>
+        <h1 className="text-xl font-semibold text-neutral-900">Inscription commerce</h1>
 
         <div className="space-y-1">
-          <label className="text-sm text-neutral-600">Nom du restaurant</label>
+          <label className="text-sm text-neutral-600">Nom du commerce</label>
           <input
             type="text"
             value={name}

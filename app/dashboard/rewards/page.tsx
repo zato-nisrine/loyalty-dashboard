@@ -1,13 +1,13 @@
-import { getRestaurant, getToken } from '@/lib/auth'
+import { getcommerce, getToken } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import RewardsManager from '@/components/RewardsManager'
 
 export default async function RewardsPage() {
-  const restaurant = await getRestaurant()
-  if (!restaurant) redirect('/login')
+  const commerce = await getcommerce()
+  if (!commerce) redirect('/login')
 
   const token = await getToken()
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/restaurants/me/reward-rules`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/commerces/me/reward-rules`, {
     headers: { Authorization: `Bearer ${token}` },
     cache: 'no-store',
   })
@@ -22,7 +22,7 @@ export default async function RewardsPage() {
         <p className="mt-1 text-sm text-stone-500">Définissez les paliers de points et les récompenses associées</p>
       </div>
 
-      <RewardsManager initialRules={rules} brandColor={restaurant.brandColor} pointsPer100Fcfa={restaurant.pointsPer100Fcfa} />
+      <RewardsManager initialRules={rules} brandColor={commerce.brandColor} pointsPer100Fcfa={commerce.pointsPer100Fcfa} />
     </div>
   )
 }

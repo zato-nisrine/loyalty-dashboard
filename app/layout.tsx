@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Fidèle Pro — Espace restaurant",
+  title: "Fidèle Pro — Espace commerce",
   description: "Gérez votre programme de fidélité, vos récompenses et vos campagnes.",
   manifest: "/manifest.json",
   appleWebApp: {

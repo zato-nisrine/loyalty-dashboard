@@ -14,11 +14,11 @@ const links = [
 ]
 
 export default function MobileNav({
-  restaurantName,
+  commerceName,
   logoUrl,
   brandColor,
 }: {
-  restaurantName: string
+  commerceName: string
   logoUrl?: string | null
   brandColor: string
 }) {
@@ -29,17 +29,17 @@ export default function MobileNav({
       <header className="flex items-center justify-between border-b border-stone-200 bg-white px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2.5">
           {logoUrl ? (
-            <img src={logoUrl} alt={restaurantName} className="h-8 w-8 rounded-lg object-cover" />
+            <img src={logoUrl} alt={commerceName} className="h-8 w-8 rounded-lg object-cover" />
           ) : (
             <div
               className="flex h-8 w-8 items-center justify-center rounded-lg text-sm font-semibold text-white"
               style={{ backgroundColor: brandColor }}
             >
-              {restaurantName.charAt(0)}
+              {commerceName.charAt(0)}
             </div>
           )}
           <p className="font-[family-name:var(--font-display)] text-base font-semibold text-stone-900">
-            {restaurantName}
+            {commerceName}
           </p>
         </div>
         <button

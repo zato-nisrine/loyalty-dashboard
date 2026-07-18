@@ -1,28 +1,28 @@
-import { getRestaurant, getToken } from '@/lib/auth'
+import { getcommerce, getToken } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import LogoutButton from '@/components/LogoutButton'
 
 export default async function DashboardPage() {
-  const restaurant = await getRestaurant()
-  if (!restaurant) redirect('/login')
+  const commerce = await getcommerce()
+  if (!commerce) redirect('/login')
 
   const token = await getToken()
-  const statsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/restaurants/me/dashboard`, {
+  const statsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/commerces/me/dashboard`, {
     headers: { Authorization: `Bearer ${token}` },
     cache: 'no-store',
   })
   const stats = statsRes.ok ? await statsRes.json() : null
-  const brandColor = restaurant.brandColor || '#C2410C'
+  const brandColor = commerce.brandColor || '#C2410C'
 
   return (
     <div className="space-y-8">
       <div className="flex items-start justify-between">
         <div>
           <h1 className="font-[family-name:var(--font-display)] text-3xl font-semibold text-stone-900">
-            {restaurant.name}
+            {commerce.name}
           </h1>
           <p className="mt-1 text-sm font-medium uppercase tracking-wide" style={{ color: brandColor }}>
-            Plan {restaurant.plan}
+            Plan {commerce.plan}
           </p>
         </div>
         <LogoutButton />
@@ -54,7 +54,7 @@ export default async function DashboardPage() {
           <div className="rounded-2xl border border-stone-200 bg-[#1C1917] p-5">
             <div className="mb-3 h-1 w-8 rounded-full bg-white/30" />
             <p className="text-xs font-medium uppercase tracking-wide text-stone-400">QR code</p>
-            <p className="mt-1 truncate text-sm font-medium text-white">{restaurant.qrCodeToken}</p>
+            <p className="mt-1 truncate text-sm font-medium text-white">{commerce.qrCodeToken}</p>
           </div>
         </div>
       )}

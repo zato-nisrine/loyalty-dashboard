@@ -14,19 +14,19 @@ const PLAN_PRICES: Record<string, number> = {
   premium: 30000,
 }
 
-export default function AdminRestaurantsList({ initialRestaurants }: { initialRestaurants: any[] }) {
-  const [restaurants, setRestaurants] = useState(initialRestaurants)
+export default function AdmincommercesList({ initialcommerces }: { initialcommerces: any[] }) {
+  const [commerces, setcommerces] = useState(initialcommerces)
   const [activating, setActivating] = useState<string | null>(null)
   const [selectedPlan, setSelectedPlan] = useState<Record<string, string>>({})
 
-  async function handleActivate(restaurantId: string) {
-    const plan = selectedPlan[restaurantId] || 'starter'
-    setActivating(restaurantId)
+  async function handleActivate(commerceId: string) {
+    const plan = selectedPlan[commerceId] || 'starter'
+    setActivating(commerceId)
 
-    const res = await fetch('/api/admin/restaurants/activate', {
+    const res = await fetch('/api/admin/commerces/activate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ restaurantId, plan }),
+      body: JSON.stringify({ commerceId, plan }),
     })
 
     setActivating(null)
@@ -34,8 +34,8 @@ export default function AdminRestaurantsList({ initialRestaurants }: { initialRe
     if (!res.ok) return
 
     const updated = await res.json()
-    setRestaurants(restaurants.map((r) =>
-      r.id === restaurantId
+    setcommerces(commerces.map((r) =>
+      r.id === commerceId
         ? { ...r, plan: updated.plan, subscriptionStatus: updated.subscriptionStatus, subscriptionExpiresAt: updated.subscriptionExpiresAt }
         : r
     ))
@@ -43,7 +43,7 @@ export default function AdminRestaurantsList({ initialRestaurants }: { initialRe
 
   return (
     <div className="space-y-4">
-      {restaurants.map((r) => {
+      {commerces.map((r) => {
         const status = STATUS_LABELS[r.subscriptionStatus] || STATUS_LABELS.expired
         const expiresDate = new Date(r.subscriptionExpiresAt)
         const daysLeft = Math.ceil((expiresDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24))
@@ -97,9 +97,9 @@ export default function AdminRestaurantsList({ initialRestaurants }: { initialRe
         )
       })}
 
-      {restaurants.length === 0 && (
+      {commerces.length === 0 && (
         <div className="rounded-2xl border border-dashed border-stone-300 bg-white p-8 text-center">
-          <p className="text-sm text-stone-500">Aucun restaurant inscrit pour le moment</p>
+          <p className="text-sm text-stone-500">Aucun commerce inscrit pour le moment</p>
         </div>
       )}
     </div>

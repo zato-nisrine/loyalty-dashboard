@@ -54,11 +54,11 @@ export default function AdminMobileNav() {
                 Vue globale
               </Link>
               <Link
-                href="/admin/restaurants"
+                href="/admin/commerces"
                 onClick={() => setOpen(false)}
                 className="rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50"
               >
-                Restaurants
+                commerces
               </Link>
               <button
                 onClick={handleLogout}

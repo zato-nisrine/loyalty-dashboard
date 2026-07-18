@@ -1,12 +1,12 @@
-import { getRestaurant } from '@/lib/auth'
+import { getcommerce } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import QrCodeDisplay from '@/components/QrCodeDisplay'
 
 export default async function QrCodePage() {
-  const restaurant = await getRestaurant()
-  if (!restaurant) redirect('/login')
+  const commerce = await getcommerce()
+  if (!commerce) redirect('/login')
 
-  const joinUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/join?token=${restaurant.qrCodeToken}`
+  const joinUrl = `${process.env.NEXT_PUBLIC_CLIENT_URL}/join?token=${commerce.qrCodeToken}`
 
   return (
     <div className="space-y-6">
@@ -19,7 +19,7 @@ export default async function QrCodePage() {
         </p>
       </div>
 
-      <QrCodeDisplay url={joinUrl} restaurantName={restaurant.name} brandColor={restaurant.brandColor} />
+      <QrCodeDisplay url={joinUrl} commerceName={commerce.name} brandColor={commerce.brandColor} />
     </div>
   )
 }

@@ -1,10 +1,10 @@
-import { getRestaurant } from '@/lib/auth'
+import { getcommerce } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import CodeGenerator from '@/components/CodeGenerator'
 
 export default async function CodesPage() {
-  const restaurant = await getRestaurant()
-  if (!restaurant) redirect('/login')
+  const commerce = await getcommerce()
+  if (!commerce) redirect('/login')
 
   return (
     <div className="space-y-6">
@@ -15,7 +15,7 @@ export default async function CodesPage() {
         <p className="mt-1 text-sm text-stone-500">Générez un code à donner au client après son achat</p>
       </div>
 
-      <CodeGenerator brandColor={restaurant.brandColor} />
+      <CodeGenerator brandColor={commerce.brandColor} />
     </div>
   )
 }

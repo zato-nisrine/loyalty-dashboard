@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-export default function SettingsForm({ restaurant }: { restaurant: any }) {
+export default function SettingsForm({ commerce }: { commerce: any }) {
   const router = useRouter()
-  const [logoPreview, setLogoPreview] = useState(restaurant.logoUrl)
-  const [brandColor, setBrandColor] = useState(restaurant.brandColor)
-  const [pointsRate, setPointsRate] = useState(restaurant.pointsPer100Fcfa)
+  const [logoPreview, setLogoPreview] = useState(commerce.logoUrl)
+  const [brandColor, setBrandColor] = useState(commerce.brandColor)
+  const [pointsRate, setPointsRate] = useState(commerce.pointsPer100Fcfa)
   const [uploading, setUploading] = useState(false)
   const [savingColor, setSavingColor] = useState(false)
   const [savingRate, setSavingRate] = useState(false)
@@ -23,7 +23,7 @@ export default function SettingsForm({ restaurant }: { restaurant: any }) {
     const formData = new FormData()
     formData.append('file', file)
 
-    const res = await fetch('/api/restaurants/logo', {
+    const res = await fetch('/api/commerces/logo', {
       method: 'POST',
       body: formData,
     })
@@ -44,7 +44,7 @@ export default function SettingsForm({ restaurant }: { restaurant: any }) {
     setSavingColor(true)
     setMessage('')
 
-    const res = await fetch('/api/restaurants/branding', {
+    const res = await fetch('/api/commerces/branding', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ brandColor }),
@@ -65,7 +65,7 @@ export default function SettingsForm({ restaurant }: { restaurant: any }) {
     setSavingRate(true)
     setMessage('')
 
-    const res = await fetch('/api/restaurants/points-rate', {
+    const res = await fetch('/api/commerces/points-rate', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pointsPer100Fcfa: Number(pointsRate) }),
@@ -91,7 +91,7 @@ export default function SettingsForm({ restaurant }: { restaurant: any }) {
         <div className="flex items-center gap-5">
           <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-stone-200 bg-stone-50">
             {logoPreview ? (
-              <img src={logoPreview} alt="Logo du restaurant" className="h-full w-full object-cover" />
+              <img src={logoPreview} alt="Logo du commerce" className="h-full w-full object-cover" />
             ) : (
               <span className="text-xs text-stone-400">Aucun logo</span>
             )}

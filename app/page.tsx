@@ -93,7 +93,7 @@ export default function Home() {
       </section>
 
       <footer className="border-t border-stone-200 px-5 py-6 text-center text-xs text-stone-400">
-        Fidèle — plateforme de fidélisation pour commerces et restaurants
+        Fidèle — plateforme de fidélisation pour commerces et commerces
       </footer>
     </div>
   )

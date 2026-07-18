@@ -5,11 +5,11 @@ import { QRCodeSVG } from 'qrcode.react'
 
 export default function QrCodeDisplay({
   url,
-  restaurantName,
+  commerceName,
   brandColor,
 }: {
   url: string
-  restaurantName: string
+  commerceName: string
   brandColor: string
 }) {
   const svgContainerRef = useRef<HTMLDivElement>(null)
@@ -40,7 +40,7 @@ export default function QrCodeDisplay({
       ctx.fillStyle = '#1C1917'
       ctx.font = '600 20px Arial'
       ctx.textAlign = 'center'
-      ctx.fillText(restaurantName, canvas.width / 2, 36)
+      ctx.fillText(commerceName, canvas.width / 2, 36)
 
       ctx.drawImage(img, padding, 56, qrSize, qrSize)
 
@@ -53,7 +53,7 @@ export default function QrCodeDisplay({
       canvas.toBlob((blob) => {
         if (!blob) return
         const link = document.createElement('a')
-        link.download = `qr-code-${restaurantName.toLowerCase().replace(/\s+/g, '-')}.png`
+        link.download = `qr-code-${commerceName.toLowerCase().replace(/\s+/g, '-')}.png`
         link.href = URL.createObjectURL(blob)
         link.click()
         URL.revokeObjectURL(link.href)
@@ -65,7 +65,7 @@ export default function QrCodeDisplay({
   return (
     <div className="flex flex-col items-center gap-6 rounded-2xl border border-stone-200 bg-white p-10">
       <p className="font-[family-name:var(--font-display)] text-xl font-semibold text-stone-900">
-        {restaurantName}
+        {commerceName}
       </p>
       <div ref={svgContainerRef} className="rounded-2xl border-4 p-4" style={{ borderColor: brandColor }}>
         <QRCodeSVG value={url} size={240} />
