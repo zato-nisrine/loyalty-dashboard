@@ -7,7 +7,7 @@ export default async function DashboardPage() {
   if (!commerce) redirect('/login')
 
   const token = await getToken()
-  const statsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/commerces/me/dashboard`, {
+  const statsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/restaurants/me/dashboard`, {
     headers: { Authorization: `Bearer ${token}` },
     cache: 'no-store',
   })

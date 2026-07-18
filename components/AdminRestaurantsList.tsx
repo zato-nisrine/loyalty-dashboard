@@ -23,7 +23,7 @@ export default function AdminRestaurantsList({ initialcommerces }: { initialcomm
     const plan = selectedPlan[commerceId] || 'starter'
     setActivating(commerceId)
 
-    const res = await fetch('/api/admin/commerces/activate', {
+    const res = await fetch('/api/admin/restaurants/activate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ commerceId, plan }),

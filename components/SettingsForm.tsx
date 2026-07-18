@@ -23,7 +23,7 @@ export default function SettingsForm({ commerce }: { commerce: any }) {
     const formData = new FormData()
     formData.append('file', file)
 
-    const res = await fetch('/api/commerces/logo', {
+    const res = await fetch('/api/restaurants/logo', {
       method: 'POST',
       body: formData,
     })
@@ -44,7 +44,7 @@ export default function SettingsForm({ commerce }: { commerce: any }) {
     setSavingColor(true)
     setMessage('')
 
-    const res = await fetch('/api/commerces/branding', {
+    const res = await fetch('/api/restaurants/branding', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ brandColor }),
@@ -65,7 +65,7 @@ export default function SettingsForm({ commerce }: { commerce: any }) {
     setSavingRate(true)
     setMessage('')
 
-    const res = await fetch('/api/commerces/points-rate', {
+    const res = await fetch('/api/restaurants/points-rate', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pointsPer100Fcfa: Number(pointsRate) }),
