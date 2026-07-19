@@ -7,7 +7,7 @@ export default async function AdminDashboardPage() {
 
   const secret = await getAdminSecret()
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/commerces`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/restaurants`, {
     headers: { 'x-admin-secret': secret! },
     cache: 'no-store',
   })

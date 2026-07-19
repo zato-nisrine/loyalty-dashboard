@@ -14,8 +14,8 @@ const PLAN_PRICES: Record<string, number> = {
   premium: 30000,
 }
 
-export default function AdminRestaurantsList({ initialcommerces }: { initialcommerces: any[] }) {
-  const [commerces, setcommerces] = useState(initialcommerces)
+export default function AdminRestaurantsList({ initialRestaurants }: { initialRestaurants: any[] }) {
+  const [commerces, setcommerces] = useState(initialRestaurants)
   const [activating, setActivating] = useState<string | null>(null)
   const [selectedPlan, setSelectedPlan] = useState<Record<string, string>>({})
 

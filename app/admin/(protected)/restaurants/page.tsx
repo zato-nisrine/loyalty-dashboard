@@ -8,7 +8,7 @@ export default async function AdmincommercesPage() {
 
   const secret = await getAdminSecret()
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/commerces`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/restaurants`, {
     headers: { 'x-admin-secret': secret! },
     cache: 'no-store',
   })
@@ -23,7 +23,7 @@ export default async function AdmincommercesPage() {
         <p className="mt-1 text-sm text-stone-500">{commerces.length} commerce(s) inscrit(s)</p>
       </div>
 
-      <AdminRestaurantsList initialcommerces={commerces} />
+      <AdminRestaurantsList initialRestaurants={commerces} />
     </div>
   )
 }
