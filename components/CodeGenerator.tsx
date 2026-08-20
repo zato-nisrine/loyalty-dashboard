@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react'
 
 export default function CodeGenerator({ brandColor }: { brandColor: string }) {
-  const [phone, setPhone] = useState('')
-  const [client, setClient] = useState<any>(null)
+  const [pseudo, setPseudo] = useState('')
+  const [clients, setClients] = useState<any[]>([])
+  const [selectedClient, setSelectedClient] = useState<any>(null)
   const [searchError, setSearchError] = useState('')
   const [searching, setSearching] = useState(false)
 
@@ -27,11 +28,12 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault()
     setSearchError('')
-    setClient(null)
+    setClients([])
+    setSelectedClient(null)
     setCode(null)
     setSearching(true)
 
-    const res = await fetch(`/api/loyalty-cards/search?phone=${encodeURIComponent(phone)}`)
+    const res = await fetch(`/api/loyalty-cards/search?pseudo=${encodeURIComponent(pseudo)}`)
     setSearching(false)
 
     if (!res.ok) {
@@ -40,7 +42,7 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
       return
     }
 
-    setClient(await res.json())
+    setClients(await res.json())
   }
 
   async function handleGenerate(e: React.FormEvent) {
@@ -51,7 +53,7 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
     const res = await fetch('/api/validation-codes/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ loyaltyCardId: client.id, amountFcfa: Number(amount) }),
+      body: JSON.stringify({ loyaltyCardId: selectedClient.id, amountFcfa: Number(amount) }),
     })
 
     setGenerating(false)
@@ -66,8 +68,9 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
   }
 
   function reset() {
-    setPhone('')
-    setClient(null)
+    setPseudo('')
+    setClients([])
+    setSelectedClient(null)
     setAmount('')
     setCode(null)
     setSearchError('')
@@ -80,7 +83,7 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
 
     return (
       <div className="rounded-2xl border border-stone-200 bg-white p-8 text-center">
-        <p className="text-sm text-stone-500">Code à donner à {client.client.name}</p>
+        <p className="text-sm text-stone-500">Code à donner à {selectedClient.client.name}</p>
         <p
           className="my-6 font-[family-name:var(--font-display)] text-5xl font-bold tracking-widest"
           style={{ color: brandColor }}
@@ -122,10 +125,10 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
         </h2>
         <form onSubmit={handleSearch} className="flex gap-3">
           <input
-            type="tel"
-            placeholder="Numéro de téléphone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            type="text"
+            placeholder="Pseudo / Nom du client"
+            value={pseudo}
+            onChange={(e) => setPseudo(e.target.value)}
             required
             className="flex-1 rounded-lg border border-stone-300 px-3 py-2 text-sm text-stone-900"
           />
@@ -139,20 +142,49 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
           </button>
         </form>
         {searchError && <p className="mt-3 text-sm text-red-600">{searchError}</p>}
-        {client && (
-          <div className="mt-4 flex items-center justify-between rounded-lg bg-stone-50 px-4 py-3">
+        {clients.length > 0 && !selectedClient && (
+          <div className="mt-4 space-y-2">
+            <p className="text-sm text-stone-500 mb-2">Sélectionnez le client :</p>
+            {clients.map((c) => (
+              <button
+                key={c.id}
+                onClick={() => setSelectedClient(c)}
+                className="w-full text-left flex items-center justify-between rounded-lg bg-stone-50 px-4 py-3 hover:bg-stone-100 transition-colors border border-transparent hover:border-stone-200"
+              >
+                <div>
+                  <p className="text-sm font-medium text-stone-900">{c.client.name}</p>
+                  <p className="text-xs text-stone-500">{c.client.phone}</p>
+                </div>
+                <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: `${brandColor}1A`, color: brandColor }}>
+                  {c.pointsBalance} pts
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {selectedClient && (
+          <div className="mt-4 flex items-center justify-between rounded-lg px-4 py-3 border" style={{ borderColor: brandColor, backgroundColor: `${brandColor}05` }}>
             <div>
-              <p className="text-sm font-medium text-stone-900">{client.client.name}</p>
-              <p className="text-xs text-stone-500">{client.client.phone}</p>
+              <p className="text-sm font-medium text-stone-900">{selectedClient.client.name}</p>
+              <p className="text-xs text-stone-500">{selectedClient.client.phone}</p>
             </div>
-            <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: `${brandColor}1A`, color: brandColor }}>
-              {client.pointsBalance} pts
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="rounded-full px-3 py-1 text-xs font-semibold" style={{ backgroundColor: `${brandColor}1A`, color: brandColor }}>
+                {selectedClient.pointsBalance} pts
+              </span>
+              <button 
+                onClick={() => setSelectedClient(null)}
+                className="text-xs text-stone-500 underline"
+              >
+                Changer
+              </button>
+            </div>
           </div>
         )}
       </div>
 
-      {client && (
+      {selectedClient && (
         <div className="rounded-2xl border border-stone-200 bg-white p-6">
           <h2 className="mb-4 font-[family-name:var(--font-display)] text-lg font-semibold text-stone-900">
             2. Montant de l'achat

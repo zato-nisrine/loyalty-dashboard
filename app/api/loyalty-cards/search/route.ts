@@ -5,9 +5,9 @@ export async function GET(req: NextRequest) {
   const token = await getToken()
   if (!token) return NextResponse.json({ message: 'Non authentifié' }, { status: 401 })
 
-  const phone = req.nextUrl.searchParams.get('phone')
+  const pseudo = req.nextUrl.searchParams.get('pseudo')
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/loyalty-cards/search?phone=${phone}`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/loyalty-cards/search?pseudo=${pseudo}`, {
     headers: { Authorization: `Bearer ${token}` },
   })
 
