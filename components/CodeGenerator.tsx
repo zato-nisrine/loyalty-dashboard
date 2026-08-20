@@ -93,7 +93,7 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
 
   if (creditResult) {
     return (
-      <div className="rounded-2xl border border-stone-200 bg-white p-8 text-center">
+      <div className="rounded-2xl border border-stone-200 bg-white p-6 sm:p-8 text-center">
         <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full mx-auto" style={{ backgroundColor: `${brandColor}1A` }}>
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style={{ color: brandColor }}>
             <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -101,7 +101,7 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
         </div>
         <p className="text-sm text-stone-500">Points crédités à {selectedClient.client.name}</p>
         <p
-          className="my-6 font-[family-name:var(--font-display)] text-5xl font-bold tracking-widest"
+          className="my-6 font-[family-name:var(--font-display)] text-4xl sm:text-5xl font-bold tracking-widest"
           style={{ color: brandColor }}
         >
           +{creditResult.pointsEarned}
@@ -113,12 +113,14 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
           Nouveau solde : <span className="font-medium text-stone-900">{creditResult.newBalance} pts</span>
         </p>
 
-        <button
-          onClick={reset}
-          className="mt-6 w-full rounded-full border border-stone-300 px-6 py-3 text-sm font-medium text-stone-700 hover:border-stone-400 sm:w-auto"
-        >
-          Scanner un nouveau client
-        </button>
+        <div className="mt-6 flex justify-center">
+          <button
+            onClick={reset}
+            className="w-full max-w-xs rounded-full border border-stone-300 px-6 py-3 text-sm font-medium text-stone-700 hover:border-stone-400"
+          >
+            Scanner un nouveau client
+          </button>
+        </div>
       </div>
     )
   }
