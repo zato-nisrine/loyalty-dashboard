@@ -33,6 +33,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
         <Link href="/dashboard" className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50">
           Tableau de bord
         </Link>
+        <Link href="/dashboard/clients" className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50">
+          Clients
+        </Link>
         <Link href="/dashboard/codes" className="flex items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50">
           Code de validation
         </Link>
