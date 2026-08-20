@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import QrScannerComponent from './QrScanner'
 
 export default function CodeGenerator({ brandColor }: { brandColor: string }) {
   const [activeTab, setActiveTab] = useState<'search' | 'scan'>('search')
@@ -27,46 +28,26 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
     return () => clearInterval(interval)
   }, [code])
 
-  useEffect(() => {
-    let scanner: any;
-    if (activeTab === 'scan' && !selectedClient) {
-      import('html5-qrcode').then(({ Html5QrcodeScanner }) => {
-        scanner = new Html5QrcodeScanner('qr-reader', { fps: 5, qrbox: { width: 250, height: 250 } }, false)
-        scanner.render(
-          async (decodedText: string) => {
-            scanner.pause(true)
-            setScannerError('')
-            setSearching(true)
-            try {
-              const res = await fetch(`/api/loyalty-cards/search-by-id?cardId=${encodeURIComponent(decodedText)}`)
-              if (!res.ok) {
-                const data = await res.json()
-                setScannerError(data.message || 'Carte invalide')
-                scanner.resume()
-              } else {
-                const data = await res.json()
-                setClients(data)
-                setSelectedClient(data[0])
-                scanner.clear()
-              }
-            } catch (e) {
-              setScannerError('Erreur de réseau')
-              scanner.resume()
-            } finally {
-              setSearching(false)
-            }
-          },
-          () => {}
-        )
-      })
-    }
-
-    return () => {
-      if (scanner) {
-        scanner.clear().catch(console.error)
+  const handleScan = useCallback(async (decodedText: string) => {
+    if (searching) return // Prevent multiple scans
+    setScannerError('')
+    setSearching(true)
+    try {
+      const res = await fetch(`/api/loyalty-cards/search-by-id?cardId=${encodeURIComponent(decodedText)}`)
+      if (!res.ok) {
+        const data = await res.json()
+        setScannerError(data.message || 'Carte invalide')
+      } else {
+        const data = await res.json()
+        setClients(data)
+        setSelectedClient(data[0])
       }
+    } catch (e) {
+      setScannerError('Erreur de réseau')
+    } finally {
+      setSearching(false)
     }
-  }, [activeTab, selectedClient])
+  }, [searching])
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -212,10 +193,12 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
 
         {!selectedClient && activeTab === 'scan' && (
           <div className="flex flex-col items-center">
-            <p className="mb-3 text-sm text-stone-500 text-center">Placez le QR code du client devant la caméra</p>
-            <div id="qr-reader" className="w-full max-w-sm overflow-hidden rounded-xl border border-stone-200 bg-stone-50"></div>
+            <p className="mb-4 text-sm text-stone-500 text-center">Placez le QR code du client devant la caméra</p>
+            <div className="w-full max-w-sm">
+              <QrScannerComponent onScan={handleScan} />
+            </div>
             {scannerError && <p className="mt-3 text-sm text-red-600">{scannerError}</p>}
-            {searching && <p className="mt-3 text-sm text-stone-500">Vérification de la carte...</p>}
+            {searching && !scannerError && <p className="mt-3 text-sm text-stone-500">Vérification de la carte...</p>}
           </div>
         )}
 

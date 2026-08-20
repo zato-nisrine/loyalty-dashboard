@@ -1,5 +1,6 @@
 import { getRestaurant, getToken } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import LogoutButton from '@/components/LogoutButton'
 
 export default async function DashboardPage() {
@@ -25,7 +26,16 @@ export default async function DashboardPage() {
             Plan {commerce.plan}
           </p>
         </div>
-        <LogoutButton />
+        <div className="flex items-center gap-3">
+          <Link
+            href="/dashboard/codes"
+            className="rounded-full px-5 py-2 text-sm font-medium text-white shadow-sm hover:opacity-90"
+            style={{ backgroundColor: brandColor }}
+          >
+            Scanner / Nouveau code
+          </Link>
+          <LogoutButton />
+        </div>
       </div>
 
       {stats && (
