@@ -13,20 +13,9 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
   const [scannerError, setScannerError] = useState('')
 
   const [amount, setAmount] = useState('')
-  const [generating, setGenerating] = useState(false)
-  const [code, setCode] = useState<any>(null)
-  const [codeError, setCodeError] = useState('')
-  const [secondsLeft, setSecondsLeft] = useState(0)
-
-  useEffect(() => {
-    if (!code) return
-    const interval = setInterval(() => {
-      const remaining = Math.max(0, Math.floor((new Date(code.expiresAt).getTime() - Date.now()) / 1000))
-      setSecondsLeft(remaining)
-      if (remaining === 0) clearInterval(interval)
-    }, 1000)
-    return () => clearInterval(interval)
-  }, [code])
+  const [crediting, setCrediting] = useState(false)
+  const [creditResult, setCreditResult] = useState<any>(null)
+  const [creditError, setCreditError] = useState('')
 
   const handleScan = useCallback(async (decodedText: string) => {
     if (searching) return // Prevent multiple scans
@@ -54,7 +43,7 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
     setSearchError('')
     setClients([])
     setSelectedClient(null)
-    setCode(null)
+    setCreditResult(null)
     setSearching(true)
 
     const res = await fetch(`/api/loyalty-cards/search?pseudo=${encodeURIComponent(pseudo)}`)
@@ -71,24 +60,24 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
 
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault()
-    setCodeError('')
-    setGenerating(true)
+    setCreditError('')
+    setCrediting(true)
 
-    const res = await fetch('/api/validation-codes/generate', {
+    const res = await fetch('/api/validation-codes/credit-direct', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ loyaltyCardId: selectedClient.id, amountFcfa: Number(amount) }),
     })
 
-    setGenerating(false)
+    setCrediting(false)
 
     if (!res.ok) {
       const data = await res.json()
-      setCodeError(data.message || 'Erreur lors de la génération du code')
+      setCreditError(data.message || 'Erreur lors du crédit des points')
       return
     }
 
-    setCode(await res.json())
+    setCreditResult(await res.json())
   }
 
   function reset() {
@@ -96,47 +85,39 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
     setClients([])
     setSelectedClient(null)
     setAmount('')
-    setCode(null)
+    setCreditResult(null)
     setSearchError('')
     setScannerError('')
-    setCodeError('')
+    setCreditError('')
   }
 
-  if (code) {
-    const minutes = Math.floor(secondsLeft / 60)
-    const seconds = secondsLeft % 60
-
+  if (creditResult) {
     return (
       <div className="rounded-2xl border border-stone-200 bg-white p-8 text-center">
-        <p className="text-sm text-stone-500">Code à donner à {selectedClient.client.name}</p>
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full mx-auto" style={{ backgroundColor: `${brandColor}1A` }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" style={{ color: brandColor }}>
+            <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        <p className="text-sm text-stone-500">Points crédités à {selectedClient.client.name}</p>
         <p
           className="my-6 font-[family-name:var(--font-display)] text-5xl font-bold tracking-widest"
           style={{ color: brandColor }}
         >
-          {code.code}
+          +{creditResult.pointsEarned}
         </p>
         <p className="text-sm text-stone-600">
-          Montant : <span className="font-medium text-stone-900">{code.amountFcfa.toLocaleString()} FCFA</span>
+          Montant : <span className="font-medium text-stone-900">{creditResult.amountFcfa.toLocaleString()} FCFA</span>
         </p>
         <p className="text-sm text-stone-600">
-          Points à créditer : <span className="font-medium text-stone-900">{code.pointsToCredit} pts</span>
+          Nouveau solde : <span className="font-medium text-stone-900">{creditResult.newBalance} pts</span>
         </p>
-
-        <div className="mt-6">
-          {secondsLeft > 0 ? (
-            <p className="text-sm font-medium text-stone-500">
-              Expire dans {minutes}:{seconds.toString().padStart(2, '0')}
-            </p>
-          ) : (
-            <p className="text-sm font-medium text-red-600">Ce code a expiré</p>
-          )}
-        </div>
 
         <button
           onClick={reset}
-          className="mt-6 rounded-full border border-stone-300 px-6 py-2 text-sm font-medium text-stone-700 hover:border-stone-400"
+          className="mt-6 w-full rounded-full border border-stone-300 px-6 py-3 text-sm font-medium text-stone-700 hover:border-stone-400 sm:w-auto"
         >
-          Générer un nouveau code
+          Scanner un nouveau client
         </button>
       </div>
     )
@@ -261,14 +242,14 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
             />
             <button
               type="submit"
-              disabled={generating}
+              disabled={crediting}
               className="rounded-full px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
               style={{ backgroundColor: brandColor }}
             >
-              {generating ? 'Génération...' : 'Générer le code'}
+              {crediting ? 'Crédit...' : 'Créditer les points'}
             </button>
           </form>
-          {codeError && <p className="mt-3 text-sm text-red-600">{codeError}</p>}
+          {creditError && <p className="mt-3 text-sm text-red-600">{creditError}</p>}
         </div>
       )}
     </div>

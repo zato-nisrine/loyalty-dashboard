@@ -10,9 +10,9 @@ export default async function CodesPage() {
     <div className="space-y-6">
       <div>
         <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-stone-900">
-          Code de validation
+          Crédit de points
         </h1>
-        <p className="mt-1 text-sm text-stone-500">Générez un code à donner au client après son achat</p>
+        <p className="mt-1 text-sm text-stone-500">Créditez directement les points au client après son achat</p>
       </div>
 
       <CodeGenerator brandColor={commerce.brandColor} />
