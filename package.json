@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "html5-qrcode": "^2.3.8",
     "jose": "^6.2.3",
     "next": "16.2.9",
     "qrcode.react": "^4.2.0",

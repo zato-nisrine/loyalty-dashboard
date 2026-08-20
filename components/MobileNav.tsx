@@ -5,6 +5,7 @@ import Link from 'next/link'
 
 const links = [
   { href: '/dashboard', label: 'Tableau de bord' },
+  { href: '/dashboard/clients', label: 'Clients' },
   { href: '/dashboard/codes', label: 'Code de validation' },
   { href: '/dashboard/rewards', label: 'Récompenses' },
   { href: '/dashboard/redemptions', label: 'Demandes' },

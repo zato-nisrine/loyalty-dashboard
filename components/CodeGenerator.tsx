@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react'
 
 export default function CodeGenerator({ brandColor }: { brandColor: string }) {
+  const [activeTab, setActiveTab] = useState<'search' | 'scan'>('search')
   const [pseudo, setPseudo] = useState('')
   const [clients, setClients] = useState<any[]>([])
   const [selectedClient, setSelectedClient] = useState<any>(null)
   const [searchError, setSearchError] = useState('')
   const [searching, setSearching] = useState(false)
+  const [scannerError, setScannerError] = useState('')
 
   const [amount, setAmount] = useState('')
   const [generating, setGenerating] = useState(false)
@@ -24,6 +26,47 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
     }, 1000)
     return () => clearInterval(interval)
   }, [code])
+
+  useEffect(() => {
+    let scanner: any;
+    if (activeTab === 'scan' && !selectedClient) {
+      import('html5-qrcode').then(({ Html5QrcodeScanner }) => {
+        scanner = new Html5QrcodeScanner('qr-reader', { fps: 5, qrbox: { width: 250, height: 250 } }, false)
+        scanner.render(
+          async (decodedText: string) => {
+            scanner.pause(true)
+            setScannerError('')
+            setSearching(true)
+            try {
+              const res = await fetch(`/api/loyalty-cards/search-by-id?cardId=${encodeURIComponent(decodedText)}`)
+              if (!res.ok) {
+                const data = await res.json()
+                setScannerError(data.message || 'Carte invalide')
+                scanner.resume()
+              } else {
+                const data = await res.json()
+                setClients(data)
+                setSelectedClient(data[0])
+                scanner.clear()
+              }
+            } catch (e) {
+              setScannerError('Erreur de réseau')
+              scanner.resume()
+            } finally {
+              setSearching(false)
+            }
+          },
+          () => {}
+        )
+      })
+    }
+
+    return () => {
+      if (scanner) {
+        scanner.clear().catch(console.error)
+      }
+    }
+  }, [activeTab, selectedClient])
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -74,6 +117,7 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
     setAmount('')
     setCode(null)
     setSearchError('')
+    setScannerError('')
     setCodeError('')
   }
 
@@ -120,30 +164,63 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
   return (
     <div className="space-y-6">
       <div className="rounded-2xl border border-stone-200 bg-white p-6">
-        <h2 className="mb-4 font-[family-name:var(--font-display)] text-lg font-semibold text-stone-900">
-          1. Trouver le client
-        </h2>
-        <form onSubmit={handleSearch} className="flex gap-3">
-          <input
-            type="text"
-            placeholder="Pseudo / Nom du client"
-            value={pseudo}
-            onChange={(e) => setPseudo(e.target.value)}
-            required
-            className="flex-1 rounded-lg border border-stone-300 px-3 py-2 text-sm text-stone-900"
-          />
-          <button
-            type="submit"
-            disabled={searching}
-            className="rounded-full px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
-            style={{ backgroundColor: brandColor }}
-          >
-            {searching ? 'Recherche...' : 'Rechercher'}
-          </button>
-        </form>
-        {searchError && <p className="mt-3 text-sm text-red-600">{searchError}</p>}
-        {clients.length > 0 && !selectedClient && (
-          <div className="mt-4 space-y-2">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="font-[family-name:var(--font-display)] text-lg font-semibold text-stone-900">
+            1. Trouver le client
+          </h2>
+          {!selectedClient && (
+            <div className="flex rounded-lg bg-stone-100 p-1">
+              <button
+                onClick={() => { setActiveTab('search'); setSearchError(''); setScannerError('') }}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${activeTab === 'search' ? 'bg-white shadow-sm text-stone-900' : 'text-stone-500 hover:text-stone-700'}`}
+              >
+                Recherche
+              </button>
+              <button
+                onClick={() => { setActiveTab('scan'); setSearchError(''); setScannerError('') }}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${activeTab === 'scan' ? 'bg-white shadow-sm text-stone-900' : 'text-stone-500 hover:text-stone-700'}`}
+              >
+                Caméra
+              </button>
+            </div>
+          )}
+        </div>
+
+        {!selectedClient && activeTab === 'search' && (
+          <div>
+            <form onSubmit={handleSearch} className="flex gap-3">
+              <input
+                type="text"
+                placeholder="Pseudo / Nom du client"
+                value={pseudo}
+                onChange={(e) => setPseudo(e.target.value)}
+                required
+                className="flex-1 rounded-lg border border-stone-300 px-3 py-2 text-sm text-stone-900"
+              />
+              <button
+                type="submit"
+                disabled={searching}
+                className="rounded-full px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
+                style={{ backgroundColor: brandColor }}
+              >
+                {searching ? 'Recherche...' : 'Rechercher'}
+              </button>
+            </form>
+            {searchError && <p className="mt-3 text-sm text-red-600">{searchError}</p>}
+          </div>
+        )}
+
+        {!selectedClient && activeTab === 'scan' && (
+          <div className="flex flex-col items-center">
+            <p className="mb-3 text-sm text-stone-500 text-center">Placez le QR code du client devant la caméra</p>
+            <div id="qr-reader" className="w-full max-w-sm overflow-hidden rounded-xl border border-stone-200 bg-stone-50"></div>
+            {scannerError && <p className="mt-3 text-sm text-red-600">{scannerError}</p>}
+            {searching && <p className="mt-3 text-sm text-stone-500">Vérification de la carte...</p>}
+          </div>
+        )}
+
+        {clients.length > 0 && !selectedClient && activeTab === 'search' && (
+          <div className="mt-6 space-y-2">
             <p className="text-sm text-stone-500 mb-2">Sélectionnez le client :</p>
             {clients.map((c) => (
               <button
@@ -164,7 +241,7 @@ export default function CodeGenerator({ brandColor }: { brandColor: string }) {
         )}
 
         {selectedClient && (
-          <div className="mt-4 flex items-center justify-between rounded-lg px-4 py-3 border" style={{ borderColor: brandColor, backgroundColor: `${brandColor}05` }}>
+          <div className="flex items-center justify-between rounded-lg px-4 py-3 border" style={{ borderColor: brandColor, backgroundColor: `${brandColor}05` }}>
             <div>
               <p className="text-sm font-medium text-stone-900">{selectedClient.client.name}</p>
               <p className="text-xs text-stone-500">{selectedClient.client.phone}</p>
