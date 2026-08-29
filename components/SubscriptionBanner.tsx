@@ -12,7 +12,7 @@ export default function SubscriptionBanner({
 
   if (isExpired) {
     return (
-      <div className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">
+      <div className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-500/10 dark:text-red-300">
         <p className="font-medium">Votre période d'essai est terminée</p>
         <p className="mt-0.5">
           La génération de codes et la confirmation de récompenses sont désactivées. Contactez-nous pour activer
@@ -24,7 +24,7 @@ export default function SubscriptionBanner({
 
   if (subscriptionStatus === 'trial' && daysLeft <= 3 && daysLeft >= 0) {
     return (
-      <div className="mb-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800">
+      <div className="mb-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:bg-amber-500/10 dark:text-amber-300">
         <p className="font-medium">
           Votre essai gratuit se termine dans {daysLeft} jour{daysLeft > 1 ? 's' : ''}
         </p>

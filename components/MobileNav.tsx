@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import ThemeToggle from './ThemeToggle'
 
 const links = [
   { href: '/dashboard', label: 'Tableau de bord' },
@@ -27,7 +28,7 @@ export default function MobileNav({
 
   return (
     <>
-      <header className="flex items-center justify-between border-b border-stone-200 bg-white px-4 py-3 lg:hidden">
+      <header className="flex items-center justify-between border-b border-border-subtle bg-background px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2.5">
           {logoUrl ? (
             <img src={logoUrl} alt={commerceName} className="h-8 w-8 rounded-lg object-cover" />
@@ -39,34 +40,37 @@ export default function MobileNav({
               {commerceName.charAt(0)}
             </div>
           )}
-          <p className="font-[family-name:var(--font-display)] text-base font-semibold text-stone-900">
+          <p className="font-[family-name:var(--font-display)] text-base font-semibold text-foreground">
             {commerceName}
           </p>
         </div>
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Ouvrir le menu"
-          className="flex h-9 w-9 items-center justify-center rounded-lg border border-stone-200"
-        >
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-            <path d="M2 4.5H16M2 9H16M2 13.5H16" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-        </button>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            onClick={() => setOpen(true)}
+            aria-label="Ouvrir le menu"
+            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border-subtle"
+          >
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+              <path d="M2 4.5H16M2 9H16M2 13.5H16" stroke="var(--foreground)" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
       </header>
 
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/30" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-0 h-full w-72 bg-white p-5 shadow-xl">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 top-0 h-full w-72 bg-surface p-5 shadow-xl">
             <div className="mb-6 flex items-center justify-between">
-              <p className="font-[family-name:var(--font-display)] text-lg font-semibold text-stone-900">Menu</p>
+              <p className="font-[family-name:var(--font-display)] text-lg font-semibold text-foreground">Menu</p>
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Fermer le menu"
-                className="flex h-8 w-8 items-center justify-center rounded-lg border border-stone-200"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-border-subtle"
               >
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M1 1L13 13M1 13L13 1" stroke="#1C1917" strokeWidth="1.5" strokeLinecap="round" />
+                  <path d="M1 1L13 13M1 13L13 1" stroke="var(--foreground)" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </button>
             </div>
@@ -76,7 +80,7 @@ export default function MobileNav({
                   key={link.href}
                   href={link.href}
                   onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50"
+                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted hover:bg-surface-muted hover:text-foreground"
                 >
                   {link.label}
                 </Link>
