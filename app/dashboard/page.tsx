@@ -29,10 +29,16 @@ export default async function DashboardPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/dashboard/codes"
-            className="rounded-full px-5 py-2 text-sm font-medium text-white shadow-sm hover:opacity-90"
+            className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white shadow-sm hover:opacity-90 whitespace-nowrap"
             style={{ backgroundColor: brandColor }}
           >
-            Scanner / Nouveau code
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="7" height="7" rx="1.5" />
+              <rect x="14" y="3" width="7" height="7" rx="1.5" />
+              <rect x="3" y="14" width="7" height="7" rx="1.5" />
+              <rect x="14" y="14" width="7" height="7" rx="1.5" />
+            </svg>
+            Nouveau code
           </Link>
           <LogoutButton />
         </div>
