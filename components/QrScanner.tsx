@@ -3,15 +3,12 @@
 import { useEffect, useRef, useState } from 'react'
 import QrScanner from 'qr-scanner'
 
-QrScanner.WORKER_PATH = '/qr-scanner-worker.min.js'
-
 export default function QrScannerComponent({ onScan }: { onScan: (data: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const scannerRef = useRef<QrScanner | null>(null)
   const onScanRef = useRef(onScan)
   const [error, setError] = useState('')
-  const [hasFlash, setHasFlash] = useState(false)
-  const [flashOn, setFlashOn] = useState(false)
+  const [debugInfo, setDebugInfo] = useState('')
 
   useEffect(() => {
     onScanRef.current = onScan
@@ -19,9 +16,10 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
 
   useEffect(() => {
     if (!videoRef.current) return
+    const video = videoRef.current
 
     const scanner = new QrScanner(
-      videoRef.current,
+      video,
       (result) => {
         onScanRef.current(result.data)
       },
@@ -45,8 +43,12 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
 
     scanner
       .start()
-      .then(() => scanner.hasFlash())
-      .then(setHasFlash)
+      .then(() => {
+        const engine = 'BarcodeDetector' in window ? 'natif (rapide)' : 'jsQR via worker (fallback)'
+        setTimeout(() => {
+          setDebugInfo(`${video.videoWidth}x${video.videoHeight} · moteur: ${engine}`)
+        }, 500)
+      })
       .catch(() => {
         setError("Impossible d'accéder à la caméra. Vérifiez les autorisations de votre navigateur.")
       })
@@ -57,12 +59,6 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
     }
   }, [])
 
-  async function toggleFlash() {
-    if (!scannerRef.current) return
-    await scannerRef.current.toggleFlash()
-    setFlashOn(scannerRef.current.isFlashOn())
-  }
-
   return (
     <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-black">
       {error ? (
@@ -72,16 +68,10 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
       ) : (
         <>
           <video ref={videoRef} className="aspect-square w-full object-cover" />
-          {hasFlash && (
-            <button
-              onClick={toggleFlash}
-              className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 backdrop-blur-sm"
-              aria-label="Activer/désactiver le flash"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={flashOn ? '#facc15' : '#ffffff'} strokeWidth="1.8">
-                <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8Z" strokeLinejoin="round" />
-              </svg>
-            </button>
+          {debugInfo && (
+            <div className="absolute top-2 left-2 right-2 rounded-lg bg-black/70 px-3 py-1.5 text-center text-[11px] text-lime-400 font-mono">
+              {debugInfo}
+            </div>
           )}
         </>
       )}
