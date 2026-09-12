@@ -3,10 +3,17 @@
 import { useEffect, useRef, useState } from 'react'
 import QrScanner from 'qr-scanner'
 
+QrScanner.WORKER_PATH = '/qr-scanner-worker.min.js'
+
 export default function QrScannerComponent({ onScan }: { onScan: (data: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const scannerRef = useRef<QrScanner | null>(null)
+  const onScanRef = useRef(onScan)
   const [error, setError] = useState('')
+
+  useEffect(() => {
+    onScanRef.current = onScan
+  }, [onScan])
 
   useEffect(() => {
     if (!videoRef.current) return
@@ -14,7 +21,7 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
     const scanner = new QrScanner(
       videoRef.current,
       (result) => {
-        onScan(result.data)
+        onScanRef.current(result.data)
       },
       {
         highlightScanRegion: true,
@@ -33,10 +40,10 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
       scanner.stop()
       scanner.destroy()
     }
-  }, [onScan])
+  }, [])
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-stone-200 bg-black">
+    <div className="overflow-hidden rounded-2xl border border-border-subtle bg-black">
       {error ? (
         <div className="p-8 text-center">
           <p className="text-sm text-red-400">{error}</p>
