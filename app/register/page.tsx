@@ -3,11 +3,21 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
+const BUSINESS_TYPES = [
+  { value: 'restaurant', label: 'Restaurant' },
+  { value: 'coiffeur', label: 'Coiffeur' },
+  { value: 'tailleur', label: 'Tailleur' },
+  { value: 'lavage', label: 'Lavage auto' },
+  { value: 'pressing', label: 'Pressing' },
+  { value: 'autre', label: 'Autre' },
+]
+
 export default function RegisterPage() {
   const router = useRouter()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [businessType, setBusinessType] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -19,7 +29,7 @@ export default function RegisterPage() {
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, businessType }),
     })
 
     setLoading(false)
@@ -47,6 +57,25 @@ export default function RegisterPage() {
             required
             className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 outline-none focus:border-neutral-500"
           />
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-sm text-neutral-600">Type de commerce</label>
+          <select
+            value={businessType}
+            onChange={(e) => setBusinessType(e.target.value)}
+            required
+            className="w-full rounded-md border border-neutral-300 px-3 py-2 text-sm text-neutral-900 outline-none focus:border-neutral-500"
+          >
+            <option value="" disabled>
+              Sélectionnez un type
+            </option>
+            {BUSINESS_TYPES.map((t) => (
+              <option key={t.value} value={t.value}>
+                {t.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="space-y-1">
