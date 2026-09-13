@@ -8,7 +8,6 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
   const scannerRef = useRef<QrScanner | null>(null)
   const onScanRef = useRef(onScan)
   const [error, setError] = useState('')
-  const [debugInfo, setDebugInfo] = useState('')
 
   useEffect(() => {
     onScanRef.current = onScan
@@ -16,10 +15,9 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
 
   useEffect(() => {
     if (!videoRef.current) return
-    const video = videoRef.current
 
     const scanner = new QrScanner(
-      video,
+      videoRef.current,
       (result) => {
         onScanRef.current(result.data)
       },
@@ -41,17 +39,9 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
 
     scannerRef.current = scanner
 
-    scanner
-      .start()
-      .then(() => {
-        const engine = 'BarcodeDetector' in window ? 'natif (rapide)' : 'jsQR via worker (fallback)'
-        setTimeout(() => {
-          setDebugInfo(`${video.videoWidth}x${video.videoHeight} · moteur: ${engine}`)
-        }, 500)
-      })
-      .catch(() => {
-        setError("Impossible d'accéder à la caméra. Vérifiez les autorisations de votre navigateur.")
-      })
+    scanner.start().catch(() => {
+      setError("Impossible d'accéder à la caméra. Vérifiez les autorisations de votre navigateur.")
+    })
 
     return () => {
       scanner.stop()
@@ -60,20 +50,13 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
   }, [])
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-black">
+    <div className="overflow-hidden rounded-2xl border border-border-subtle bg-black">
       {error ? (
         <div className="p-8 text-center">
           <p className="text-sm text-red-400">{error}</p>
         </div>
       ) : (
-        <>
-          <video ref={videoRef} className="aspect-square w-full object-cover" />
-          {debugInfo && (
-            <div className="absolute top-2 left-2 right-2 rounded-lg bg-black/70 px-3 py-1.5 text-center text-[11px] text-lime-400 font-mono">
-              {debugInfo}
-            </div>
-          )}
-        </>
+        <video ref={videoRef} className="aspect-square w-full object-cover" />
       )}
     </div>
   )
