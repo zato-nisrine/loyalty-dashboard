@@ -21,7 +21,13 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
 
     codeReader
       .decodeFromConstraints(
-        { video: { facingMode: 'environment' } },
+        {
+          video: {
+            facingMode: 'environment',
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+          },
+        },
         videoRef.current,
         (result) => {
           if (result) {
