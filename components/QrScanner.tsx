@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser'
+import QrScanner from 'qr-scanner'
 
 export default function QrScannerComponent({ onScan }: { onScan: (data: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const controlsRef = useRef<IScannerControls | null>(null)
+  const scannerRef = useRef<QrScanner | null>(null)
   const onScanRef = useRef(onScan)
   const [error, setError] = useState('')
   const [debugInfo, setDebugInfo] = useState('')
@@ -16,36 +16,37 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
 
   useEffect(() => {
     if (!videoRef.current) return
-    let cancelled = false
-    const codeReader = new BrowserQRCodeReader()
+    const video = videoRef.current
 
-    codeReader
-      .decodeFromConstraints(
-        {
-          video: {
-            facingMode: 'environment',
-            width: { ideal: 1920 },
-            height: { ideal: 1080 },
-          },
+    const scanner = new QrScanner(
+      video,
+      (result) => {
+        onScanRef.current(result.data)
+      },
+      {
+        highlightScanRegion: true,
+        highlightCodeOutline: true,
+        preferredCamera: 'environment',
+        calculateScanRegion: (video) => {
+          const size = Math.round(Math.min(video.videoWidth, video.videoHeight) * 0.9)
+          return {
+            x: Math.round((video.videoWidth - size) / 2),
+            y: Math.round((video.videoHeight - size) / 2),
+            width: size,
+            height: size,
+          }
         },
-        videoRef.current,
-        (result) => {
-          if (result) {
-            onScanRef.current(result.getText())
-          }
-          // le callback est aussi appelé (sans résultat) à chaque frame sans QR détecté - normal, on ignore
-        }
-      )
-      .then((controls) => {
-        if (cancelled) {
-          controls.stop()
-          return
-        }
-        controlsRef.current = controls
+      }
+    )
+
+    scannerRef.current = scanner
+
+    scanner
+      .start()
+      .then(() => {
+        const engine = 'BarcodeDetector' in window ? 'natif (rapide)' : 'jsQR via worker (fallback)'
         setTimeout(() => {
-          if (videoRef.current) {
-            setDebugInfo(`${videoRef.current.videoWidth}x${videoRef.current.videoHeight} · moteur: ZXing`)
-          }
+          setDebugInfo(`${video.videoWidth}x${video.videoHeight} · moteur: ${engine}`)
         }, 500)
       })
       .catch(() => {
@@ -53,8 +54,8 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
       })
 
     return () => {
-      cancelled = true
-      controlsRef.current?.stop()
+      scanner.stop()
+      scanner.destroy()
     }
   }, [])
 
@@ -66,7 +67,7 @@ export default function QrScannerComponent({ onScan }: { onScan: (data: string) 
         </div>
       ) : (
         <>
-          <video ref={videoRef} className="aspect-square w-full object-cover" muted playsInline />
+          <video ref={videoRef} className="aspect-square w-full object-cover" />
           {debugInfo && (
             <div className="absolute top-2 left-2 right-2 rounded-lg bg-black/70 px-3 py-1.5 text-center text-[11px] text-lime-400 font-mono">
               {debugInfo}
