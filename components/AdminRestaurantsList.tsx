@@ -26,7 +26,7 @@ export default function AdminRestaurantsList({ initialRestaurants }: { initialRe
     const res = await fetch('/api/admin/restaurants/activate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ commerceId, plan }),
+      body: JSON.stringify({ restaurantId: commerceId, plan }),
     })
 
     setActivating(null)
