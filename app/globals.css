@@ -51,3 +51,47 @@ select {
   background-color: var(--surface);
   color: var(--foreground);
 }
+
+/* Animations - page d'accueil publique */
+@keyframes hero-card-float {
+  0%, 100% { transform: rotate(-8deg) translateY(0); }
+  50% { transform: rotate(-8deg) translateY(-14px); }
+}
+.hero-card-float {
+  animation: hero-card-float 5s ease-in-out infinite;
+}
+
+@keyframes hero-card-float-2 {
+  0%, 100% { transform: rotate(6deg) translateY(0); }
+  50% { transform: rotate(6deg) translateY(-10px); }
+}
+.hero-card-float-2 {
+  animation: hero-card-float-2 6s ease-in-out infinite;
+  animation-delay: 0.4s;
+}
+
+@keyframes sparkle-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+.sparkle-pulse {
+  animation: sparkle-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes path-draw {
+  from { stroke-dashoffset: 500; }
+  to { stroke-dashoffset: 0; }
+}
+.path-draw {
+  stroke-dasharray: 500;
+  animation: path-draw 2.5s ease-out forwards;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up {
+  animation: fade-in-up 0.7s ease-out forwards;
+  opacity: 0;
+}
