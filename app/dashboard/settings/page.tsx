@@ -1,4 +1,4 @@
-import { getRestaurant, getToken } from '@/lib/auth'
+import { getRestaurant } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import SettingsForm from '@/components/SettingsForm'
 
@@ -9,10 +9,12 @@ export default async function SettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-stone-900">
+        <h1 className="font-display text-[28px] sm:text-[32px] font-bold text-foreground tracking-tight">
           Paramètres
         </h1>
-        <p className="mt-1 text-sm text-stone-500">Personnalisez l'identité visuelle de votre commerce</p>
+        <p className="mt-1 text-sm text-text-muted">
+          Personnalisez l'identité visuelle et le taux de conversion de votre commerce
+        </p>
       </div>
 
       <SettingsForm commerce={commerce} />

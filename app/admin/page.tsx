@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import LoynivaLogo from '@/components/LoynivaLogo'
 
 export default function AdminLoginPage() {
   const router = useRouter()
@@ -31,35 +32,42 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FAF7F2] px-5">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F5F8FC] px-5 dark:bg-[#091420]">
+      <div className="mb-6">
+        <LoynivaLogo size="md" showTagline={false} />
+      </div>
+
+      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5 rounded-2xl border border-[#D8E0E8] bg-white p-7 shadow-sm dark:border-white/10 dark:bg-[#102A43]">
         <div className="text-center">
-          <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-stone-900">
+          <h1 className="font-display text-2xl font-bold text-[#102A43] dark:text-white">
             Espace administrateur
           </h1>
-          <p className="mt-1 text-sm text-stone-500">Accès réservé</p>
+          <p className="mt-1 text-xs text-[#5B7286] dark:text-[#8FA6BA]">Accès réservé LOYNIVA</p>
         </div>
 
-        <div className="space-y-3 rounded-2xl border border-stone-200 bg-white p-5">
-          <div className="space-y-1">
-            <label className="text-sm text-stone-600">Mot de passe admin</label>
+        <div className="space-y-4">
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#243746] dark:text-[#D8E0E8]">
+              Mot de passe admin
+            </label>
             <input
               type="password"
               value={secret}
               onChange={(e) => setSecret(e.target.value)}
               required
-              className="w-full rounded-lg border border-stone-300 px-3 py-2.5 text-sm text-stone-900"
+              placeholder="••••••••"
+              className="w-full rounded-xl border border-[#D8E0E8] bg-[#F5F8FC] px-3.5 py-2.5 text-sm text-[#243746] outline-none transition-all focus:border-[#4F9DCE] focus:bg-white focus:ring-2 focus:ring-[#4F9DCE]/20 dark:border-white/10 dark:bg-[#173859] dark:text-white"
             />
           </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-xs font-semibold text-[#C43D4D]">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-full bg-stone-900 py-2.5 text-sm font-medium text-white disabled:opacity-50"
+            className="w-full rounded-xl bg-[#102A43] py-3 text-sm font-semibold text-white hover:bg-[#1A3E61] transition-all disabled:opacity-50"
           >
-            {loading ? 'Connexion...' : 'Accéder'}
+            {loading ? 'Connexion...' : 'Accéder au panel'}
           </button>
         </div>
       </form>

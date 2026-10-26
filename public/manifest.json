@@ -1,11 +1,11 @@
 {
-  "name": "Fidèle Pro — Espace restaurant",
-  "short_name": "Fidèle Pro",
-  "description": "Gérez votre programme de fidélité, vos récompenses et vos campagnes.",
+  "name": "LOYNIVA — Espace commerce",
+  "short_name": "LOYNIVA",
+  "description": "Gérez votre programme de fidélité, vos récompenses et vos campagnes avec LOYNIVA.",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#FAF7F2",
-  "theme_color": "#C2410C",
+  "background_color": "#F5F8FC",
+  "theme_color": "#102A43",
   "orientation": "portrait",
   "icons": [
     {

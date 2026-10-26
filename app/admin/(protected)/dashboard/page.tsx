@@ -28,10 +28,10 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-stone-900">
+        <h1 className="font-display text-[28px] sm:text-[32px] font-bold text-foreground tracking-tight">
           Vue globale
         </h1>
-        <p className="mt-1 text-sm text-stone-500">Tableau de bord administrateur Fidèle</p>
+        <p className="mt-1 text-sm text-text-muted">Tableau de bord administrateur LOYNIVA</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">

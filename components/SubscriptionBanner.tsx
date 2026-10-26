@@ -12,10 +12,10 @@ export default function SubscriptionBanner({
 
   if (isExpired) {
     return (
-      <div className="mb-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800 dark:bg-red-500/10 dark:text-red-300">
-        <p className="font-medium">Votre période d'essai est terminée</p>
-        <p className="mt-0.5">
-          La génération de codes et la confirmation de récompenses sont désactivées. Contactez-nous pour activer
+      <div className="mb-6 rounded-2xl border border-[#C43D4D]/20 bg-[#C43D4D]/10 px-5 py-4 text-sm text-[#C43D4D]">
+        <p className="font-semibold">Votre période d'essai est terminée</p>
+        <p className="mt-1 text-xs opacity-90">
+          La génération de codes et la confirmation de récompenses sont désactivées. Contactez l'équipe LOYNIVA pour activer
           votre abonnement.
         </p>
       </div>
@@ -24,11 +24,13 @@ export default function SubscriptionBanner({
 
   if (subscriptionStatus === 'trial' && daysLeft <= 3 && daysLeft >= 0) {
     return (
-      <div className="mb-4 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:bg-amber-500/10 dark:text-amber-300">
-        <p className="font-medium">
-          Votre essai gratuit se termine dans {daysLeft} jour{daysLeft > 1 ? 's' : ''}
+      <div className="mb-6 rounded-2xl border border-[#B96A13]/25 bg-[#B96A13]/10 px-5 py-4 text-sm text-[#B96A13]">
+        <p className="font-semibold">
+          Votre essai gratuit LOYNIVA se termine dans {daysLeft} jour{daysLeft > 1 ? 's' : ''}
         </p>
-        <p className="mt-0.5">Contactez-nous pour choisir votre abonnement et continuer sans interruption.</p>
+        <p className="mt-1 text-xs opacity-90">
+          Choisissez votre plan dès maintenant pour continuer à fidéliser vos clients sans interruption.
+        </p>
       </div>
     )
   }

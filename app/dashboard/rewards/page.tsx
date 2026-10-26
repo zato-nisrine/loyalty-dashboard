@@ -16,13 +16,15 @@ export default async function RewardsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-stone-900">
+        <h1 className="font-display text-[28px] sm:text-[32px] font-bold text-foreground tracking-tight">
           Récompenses
         </h1>
-        <p className="mt-1 text-sm text-stone-500">Définissez les paliers de points et les récompenses associées</p>
+        <p className="mt-1 text-sm text-text-muted">
+          Définissez les paliers de points et les cadeaux associés pour récompenser vos habitués
+        </p>
       </div>
 
-      <RewardsManager initialRules={rules} brandColor={commerce.brandColor} pointsPer100Fcfa={commerce.pointsPer100Fcfa} />
+      <RewardsManager initialRules={rules} brandColor={commerce.brandColor || '#102A43'} pointsPer100Fcfa={commerce.pointsPer100Fcfa} />
     </div>
   )
 }

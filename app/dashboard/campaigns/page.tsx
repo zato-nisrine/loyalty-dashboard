@@ -17,21 +17,23 @@ export default async function CampaignsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-stone-900">
+        <h1 className="font-display text-[28px] sm:text-[32px] font-bold text-foreground tracking-tight">
           Campagnes
         </h1>
-        <p className="mt-1 text-sm text-stone-500">Envoyez des notifications à tous vos clients</p>
+        <p className="mt-1 text-sm text-text-muted">
+          Diffusez des annonces, promotions et offres spéciales à l'ensemble de votre communauté
+        </p>
       </div>
 
       {isLocked ? (
-        <div className="rounded-2xl border border-dashed border-stone-300 bg-white p-8 text-center">
-          <p className="text-sm font-medium text-stone-700">Fonctionnalité réservée au plan Pro</p>
-          <p className="mt-1 text-sm text-stone-500">
-            Passez au plan Pro pour envoyer des campagnes marketing à vos clients.
+        <div className="rounded-2xl border border-dashed border-[#D8E0E8] bg-surface p-8 text-center dark:border-white/10">
+          <p className="font-display text-base font-semibold text-foreground">Fonctionnalité réservée au plan Pro</p>
+          <p className="mt-1 text-sm text-text-muted">
+            Passez au plan Pro pour envoyer des campagnes marketing directes à tous vos clients LOYNIVA.
           </p>
         </div>
       ) : (
-        <CampaignsManager initialCampaigns={campaigns} brandColor={commerce.brandColor} />
+        <CampaignsManager initialCampaigns={campaigns} brandColor={commerce.brandColor || '#102A43'} />
       )}
     </div>
   )

@@ -11,15 +11,15 @@ export default async function QrCodePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-stone-900">
-          Mon QR code
+        <h1 className="font-display text-[28px] sm:text-[32px] font-bold text-foreground tracking-tight">
+          Mon QR code LOYNIVA
         </h1>
-        <p className="mt-1 text-sm text-stone-500">
-          Affichez ce code en caisse pour que vos clients créent leur carte de fidélité
+        <p className="mt-1 text-sm text-text-muted">
+          Affichez ce code en caisse pour que vos clients créent instantanément leur carte de fidélité
         </p>
       </div>
 
-      <QrCodeDisplay url={joinUrl} commerceName={commerce.name} brandColor={commerce.brandColor} />
+      <QrCodeDisplay url={joinUrl} commerceName={commerce.name} brandColor={commerce.brandColor || '#102A43'} />
     </div>
   )
 }

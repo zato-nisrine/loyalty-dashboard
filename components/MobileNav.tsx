@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
+import LoynivaLogo from './LoynivaLogo'
 
 const links = [
   { href: '/dashboard', label: 'Tableau de bord' },
@@ -28,31 +29,34 @@ export default function MobileNav({
 
   return (
     <>
-      <header className="flex items-center justify-between border-b border-border-subtle bg-background px-4 py-3 lg:hidden">
+      <header className="flex items-center justify-between border-b border-border-subtle bg-surface px-4 py-3 lg:hidden">
         <div className="flex items-center gap-2.5">
           {logoUrl ? (
             <img src={logoUrl} alt={commerceName} className="h-8 w-8 rounded-lg object-cover" />
           ) : (
             <div
               className="flex h-8 w-8 items-center justify-center rounded-lg text-sm font-semibold text-white"
-              style={{ backgroundColor: brandColor }}
+              style={{ backgroundColor: brandColor || '#102A43' }}
             >
               {commerceName.charAt(0)}
             </div>
           )}
-          <p className="font-[family-name:var(--font-display)] text-base font-semibold text-foreground">
-            {commerceName}
-          </p>
+          <div>
+            <p className="font-display text-sm font-bold text-foreground leading-tight">
+              {commerceName}
+            </p>
+            <p className="text-[10px] text-text-muted">LOYNIVA Pro</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <button
             onClick={() => setOpen(true)}
             aria-label="Ouvrir le menu"
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-border-subtle"
+            className="flex h-9 w-9 items-center justify-center rounded-xl border border-border-subtle bg-surface-muted"
           >
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M2 4.5H16M2 9H16M2 13.5H16" stroke="var(--foreground)" strokeWidth="1.5" strokeLinecap="round" />
+              <path d="M2 4.5H16M2 9H16M2 13.5H16" stroke="var(--foreground)" strokeWidth="1.8" strokeLinecap="round" />
             </svg>
           </button>
         </div>
@@ -60,32 +64,39 @@ export default function MobileNav({
 
       {open && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-0 h-full w-72 bg-surface p-5 shadow-xl">
-            <div className="mb-6 flex items-center justify-between">
-              <p className="font-[family-name:var(--font-display)] text-lg font-semibold text-foreground">Menu</p>
-              <button
-                onClick={() => setOpen(false)}
-                aria-label="Fermer le menu"
-                className="flex h-8 w-8 items-center justify-center rounded-lg border border-border-subtle"
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M1 1L13 13M1 13L13 1" stroke="var(--foreground)" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              </button>
-            </div>
-            <nav className="flex flex-col gap-1">
-              {links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
+          <div className="absolute inset-0 bg-[#102A43]/60 backdrop-blur-xs" onClick={() => setOpen(false)} />
+          <div className="absolute right-0 top-0 h-full w-72 bg-surface p-5 shadow-2xl flex flex-col justify-between">
+            <div>
+              <div className="mb-6 flex items-center justify-between border-b border-border-subtle pb-4">
+                <LoynivaLogo size="sm" showTagline={false} />
+                <button
                   onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-sm font-medium text-text-muted hover:bg-surface-muted hover:text-foreground"
+                  aria-label="Fermer le menu"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border-subtle"
                 >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M1 1L13 13M1 13L13 1" stroke="var(--foreground)" strokeWidth="1.8" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </div>
+
+              <nav className="flex flex-col gap-1">
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className="rounded-xl px-3.5 py-2.5 text-sm font-semibold text-text-main hover:bg-surface-muted hover:text-foreground transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+
+            <div className="border-t border-border-subtle pt-4 text-center">
+              <p className="text-xs text-text-muted">LOYNIVA • Chaque visite compte.</p>
+            </div>
           </div>
         </div>
       )}

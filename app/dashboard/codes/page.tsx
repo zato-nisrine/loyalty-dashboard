@@ -9,13 +9,15 @@ export default async function CodesPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-stone-900">
+        <h1 className="font-display text-[28px] sm:text-[32px] font-bold text-foreground tracking-tight">
           Crédit de points
         </h1>
-        <p className="mt-1 text-sm text-stone-500">Créditez directement les points au client après son achat</p>
+        <p className="mt-1 text-sm text-text-muted">
+          Créditez directement les points sur la carte LOYNIVA du client après son achat
+        </p>
       </div>
 
-      <CodeGenerator brandColor={commerce.brandColor} />
+      <CodeGenerator brandColor={commerce.brandColor || '#102A43'} />
     </div>
   )
 }
