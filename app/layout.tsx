@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/lib/theme";
 
+import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
+
 export const metadata: Metadata = {
   title: "LOYNIVA — Chaque visite compte",
   description: "Plateforme SaaS de fidélité et de relation client. La confiance qui rapproche.",
@@ -10,6 +12,16 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: "LOYNIVA",
+  },
+  icons: {
+    icon: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icons/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
   },
 };
 
@@ -30,7 +42,10 @@ export default function RootLayout({
   return (
     <html lang="fr" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          {children}
+          <ServiceWorkerRegister />
+        </ThemeProvider>
       </body>
     </html>
   );
