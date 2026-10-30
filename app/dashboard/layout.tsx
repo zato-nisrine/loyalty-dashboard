@@ -14,7 +14,12 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   return (
     <div className="min-h-screen bg-[#F5F8FC] dark:bg-[#091420] lg:grid lg:grid-cols-[260px_1fr]">
-      <MobileNav commerceName={commerce.name} logoUrl={commerce.logoUrl} brandColor={brandColor} />
+      <MobileNav
+        commerceName={commerce.name}
+        logoUrl={commerce.logoUrl}
+        brandColor={brandColor}
+        plan={commerce.plan}
+      />
 
       <aside className="hidden border-r border-[#D8E0E8] bg-surface px-5 py-6 lg:flex lg:flex-col lg:gap-1 dark:border-white/10 dark:bg-[#102A43]">
         {/* Brand header */}
@@ -132,7 +137,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </div>
       </aside>
 
-      <div className="p-4 sm:p-6 lg:p-10">
+      <div className="min-w-0 p-4 sm:p-6 lg:p-10">
         <div className="mx-auto max-w-5xl">
           <SubscriptionBanner
             subscriptionStatus={commerce.subscriptionStatus}
