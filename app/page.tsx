@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import LoynivaLogo from '@/components/LoynivaLogo'
+import LandingNavbar from '@/components/LandingNavbar'
 
 function HeroCard({ variant }: { variant: 'front' | 'back' }) {
   const isFront = variant === 'front'
@@ -81,25 +82,8 @@ export default function Home() {
 
       <div className="mx-auto max-w-6xl px-5 sm:px-8">
         {/* Navigation Bar */}
-        <header className="flex items-center justify-between py-6">
-          <Link href="/" className="transition-opacity hover:opacity-90">
-            <LoynivaLogo size="md" showTagline={true} />
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/login"
-              className="rounded-xl border border-[#D8E0E8] bg-surface px-4 py-2.5 text-sm font-semibold text-[#102A43] hover:border-[#4F9DCE] hover:text-[#4F9DCE] transition-all dark:border-white/10 dark:text-white"
-            >
-              Se connecter
-            </Link>
-            <Link
-              href="/register"
-              className="rounded-xl bg-[#102A43] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#1A3E61] transition-all hover:shadow"
-            >
-              Essai gratuit
-            </Link>
-          </div>
-        </header>
+        <LandingNavbar />
+
 
         {/* Hero Section */}
         <section className="relative grid gap-12 py-12 lg:grid-cols-12 lg:items-center lg:py-20">
