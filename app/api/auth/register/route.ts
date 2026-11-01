@@ -4,46 +4,72 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
 export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-  const body = await req.json()
+    if (!apiUrl) {
+      return NextResponse.json(
+        { message: 'Configuration manquante : NEXT_PUBLIC_API_URL non défini.' },
+        { status: 500 }
+      )
+    }
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/restaurant/register`, {
+    let res: Response
+    try {
+      res = await fetch(`${apiUrl}/auth/restaurant/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+    } catch (networkError) {
+      console.error('Erreur réseau register:', networkError)
+      return NextResponse.json(
+        {
+          message: `Impossible de joindre le serveur API (${apiUrl}). Assurez-vous que le backend (loyalty-api) est bien lancé.`,
+        },
+        { status: 503 }
+      )
+    }
 
-    method: 'POST',
+    if (!res.ok) {
+      try {
+        const error = await res.json()
+        return NextResponse.json(error, { status: res.status })
+      } catch {
+        const textError = await res.text()
+        return NextResponse.json(
+          { message: textError || `Erreur serveur (${res.status} ${res.statusText})` },
+          { status: res.status }
+        )
+      }
+    }
 
-    headers: { 'Content-Type': 'application/json' },
+    const data = await res.json()
 
-    body: JSON.stringify(body),
+    if (!data?.access_token) {
+      return NextResponse.json(
+        { message: 'Réponse invalide du serveur (jeton d\'accès manquant)' },
+        { status: 502 }
+      )
+    }
 
-  })
+    const cookieStore = await cookies()
+    cookieStore.set('access_token', data.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7,
+      path: '/',
+    })
 
-  if (!res.ok) {
-
-    const error = await res.json()
-
-    return NextResponse.json(error, { status: res.status })
-
+    return NextResponse.json({ success: true })
+  } catch (err: any) {
+    console.error('Erreur inattendue dans /api/auth/register:', err)
+    return NextResponse.json(
+      { message: err?.message || 'Erreur interne du serveur' },
+      { status: 500 }
+    )
   }
-
-  const data = await res.json()
-
-  const cookieStore = await cookies()
-
-  cookieStore.set('access_token', data.access_token, {
-
-    httpOnly: true,
-
-    secure: process.env.NODE_ENV === 'production',
-
-    sameSite: 'lax',
-
-    maxAge: 60 * 60 * 24 * 7,
-
-    path: '/',
-
-  })
-
-  return NextResponse.json({ success: true })
-
 }
 

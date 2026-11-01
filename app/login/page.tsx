@@ -17,21 +17,32 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
 
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    })
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
 
-    setLoading(false)
+      setLoading(false)
 
-    if (!res.ok) {
-      const data = await res.json()
-      setError(data.message || 'Erreur de connexion')
-      return
+      if (!res.ok) {
+        let msg = 'Erreur de connexion'
+        try {
+          const data = await res.json()
+          msg = data.message || msg
+        } catch {
+          msg = `Erreur (${res.status} ${res.statusText})`
+        }
+        setError(msg)
+        return
+      }
+
+      router.push('/dashboard')
+    } catch (err: any) {
+      setLoading(false)
+      setError(err?.message || 'Erreur de communication avec le serveur')
     }
-
-    router.push('/dashboard')
   }
 
   return (
