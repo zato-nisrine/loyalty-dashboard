@@ -30,3 +30,4 @@ export async function POST() {
     return NextResponse.json({ error: 'Erreur réseau vers le serveur' }, { status: 500 })
   }
 }
+

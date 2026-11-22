@@ -97,8 +97,18 @@ export default function MobileNav({
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
-  const { permission, requestPermission, sendTestNotification, isTesting, isLoading } = useNotification()
+  const {
+    permission,
+    requestPermission,
+    sendTestNotification,
+    isTesting,
+    isLoading,
+    platform,
+    isStandalone,
+    statusReason,
+  } = useNotification()
   const [testMessage, setTestMessage] = useState<string | null>(null)
+  const [actionHelp, setActionHelp] = useState<string | null>(null)
 
   const handleTest = async () => {
     setTestMessage('Envoi...')
@@ -274,6 +284,8 @@ export default function MobileNav({
                           ? 'En direct'
                           : permission === 'denied'
                           ? 'Bloquées'
+                          : platform === 'ios' && !isStandalone
+                          ? 'Sur écran d\'accueil'
                           : 'Désactivées'}
                       </p>
                     </div>
@@ -287,9 +299,36 @@ export default function MobileNav({
                     >
                       {isTesting ? '...' : testMessage || 'Tester'}
                     </button>
+                  ) : permission === 'denied' ? (
+                    <button
+                      onClick={() =>
+                        setActionHelp(
+                          "Notifications bloquées par votre navigateur. Cliquez sur l'icône de cadenas 🔒 à côté de l'adresse web pour autoriser les notifications, puis rafraîchissez."
+                        )
+                      }
+                      className="rounded-lg bg-amber-500/20 text-amber-700 dark:text-amber-300 px-2.5 py-1 text-[11px] font-semibold transition-all active:scale-95 shrink-0"
+                    >
+                      Aide 🔒
+                    </button>
+                  ) : platform === 'ios' && !isStandalone ? (
+                    <button
+                      onClick={() =>
+                        setActionHelp(
+                          "Sur iPhone, appuyez sur le bouton Partager ⎋ en bas de Safari, puis sur 'Sur l'écran d'accueil ⊞'. Ouvrez ensuite l'icône pour activer les notifications."
+                        )
+                      }
+                      className="rounded-lg bg-sky-500/20 text-sky-700 dark:text-sky-300 px-2.5 py-1 text-[11px] font-semibold transition-all active:scale-95 shrink-0"
+                    >
+                      Sur l'accueil ⊞
+                    </button>
                   ) : (
                     <button
-                      onClick={() => requestPermission()}
+                      onClick={async () => {
+                        const ok = await requestPermission()
+                        if (!ok && statusReason) {
+                          setActionHelp(statusReason)
+                        }
+                      }}
                       disabled={isLoading}
                       className="rounded-lg bg-indigo-600 px-2.5 py-1 text-[11px] font-semibold text-white shadow-2xs hover:bg-indigo-700 transition-all active:scale-95 disabled:opacity-50 shrink-0"
                     >
@@ -297,6 +336,18 @@ export default function MobileNav({
                     </button>
                   )}
                 </div>
+
+                {actionHelp && (
+                  <div className="mt-2.5 rounded-lg bg-background p-2 text-[11px] text-text-muted border border-border-subtle flex items-start justify-between gap-1">
+                    <span>{actionHelp}</span>
+                    <button
+                      onClick={() => setActionHelp(null)}
+                      className="text-text-muted hover:text-foreground text-xs p-0.5"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 

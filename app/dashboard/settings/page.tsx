@@ -1,6 +1,7 @@
 import { getRestaurant } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import SettingsForm from '@/components/SettingsForm'
+import NotificationSettingsCard from '@/components/NotificationSettingsCard'
 
 export default async function SettingsPage() {
   const commerce = await getRestaurant()
@@ -13,9 +14,12 @@ export default async function SettingsPage() {
           Paramètres
         </h1>
         <p className="mt-1 text-sm text-text-muted">
-          Personnalisez l'identité visuelle et le taux de conversion de votre commerce
+          Personnalisez l'identité visuelle, les alertes et le taux de conversion de votre commerce
         </p>
       </div>
+
+      {/* Notifications en direct du commerce */}
+      <NotificationSettingsCard />
 
       <SettingsForm commerce={commerce} />
     </div>

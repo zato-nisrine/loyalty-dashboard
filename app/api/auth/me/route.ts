@@ -6,3 +6,4 @@ export async function GET() {
   if (!restaurant) return NextResponse.json({ authenticated: false })
   return NextResponse.json({ authenticated: true, restaurant })
 }
+

@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState, useCallback, use
 import { getRestaurantClient } from '@/lib/auth-client'
 
 export type NotificationPermissionState = 'default' | 'granted' | 'denied' | 'unsupported'
+export type DevicePlatform = 'ios' | 'android' | 'desktop' | 'unknown'
 
 interface NotificationContextType {
   isSupported: boolean
@@ -11,6 +12,10 @@ interface NotificationContextType {
   isSubscribed: boolean
   isLoading: boolean
   isTesting: boolean
+  isStandalone: boolean
+  isSecureContext: boolean
+  platform: DevicePlatform
+  statusReason: string | null
   restaurantId: string | null
   restaurantName: string | null
   requestPermission: () => Promise<boolean>
@@ -38,9 +43,71 @@ export default function OneSignalProvider({ children }: { children?: React.React
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isTesting, setIsTesting] = useState<boolean>(false)
   const [isSupported, setIsSupported] = useState<boolean>(true)
+  const [platform, setPlatform] = useState<DevicePlatform>('unknown')
+  const [isStandalone, setIsStandalone] = useState<boolean>(false)
+  const [isSecureContext, setIsSecureContext] = useState<boolean>(true)
+  const [statusReason, setStatusReason] = useState<string | null>(null)
   const initializedRef = useRef(false)
 
-  // 1. Charger le profil du commerce connecté
+  // 1. Détecter la plateforme, le mode PWA et le contexte de sécurité
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const ua = navigator.userAgent || ''
+    const isIOSDevice =
+      /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    const isAndroidDevice = /Android/i.test(ua)
+
+    let currentPlatform: DevicePlatform = 'desktop'
+    if (isIOSDevice) {
+      currentPlatform = 'ios'
+    } else if (isAndroidDevice) {
+      currentPlatform = 'android'
+    }
+    setPlatform(currentPlatform)
+
+    const standalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone === true ||
+      document.referrer.includes('android-app://')
+    setIsStandalone(Boolean(standalone))
+
+    const secure =
+      window.isSecureContext === true ||
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1'
+    setIsSecureContext(secure)
+
+    // Sur iOS, les notifications Web Push exigent iOS 16.4+ ET que le site soit installé sur l'écran d'accueil
+    if (isIOSDevice && !standalone) {
+      setIsSupported(false)
+      setPermission('unsupported')
+      setStatusReason(
+        "Sur iPhone, Apple exige d'ajouter l'application à l'écran d'accueil pour activer les notifications (Partager ⎋ -> Sur l'écran d'accueil ⊞)."
+      )
+      return
+    }
+
+    if (!('Notification' in window) || !('serviceWorker' in navigator) || !secure) {
+      setIsSupported(false)
+      setPermission('unsupported')
+      setStatusReason('Votre navigateur ou connexion actuelle ne permet pas les notifications push.')
+      return
+    }
+
+    setIsSupported(true)
+    const currentPermission = Notification.permission as NotificationPermissionState
+    setPermission(currentPermission)
+    if (currentPermission === 'granted') {
+      setIsSubscribed(true)
+      setStatusReason(null)
+    } else if (currentPermission === 'denied') {
+      setStatusReason('Les notifications sont bloquées dans les paramètres de votre navigateur.')
+    }
+  }, [])
+
+  // 2. Charger le profil du commerce connecté
   useEffect(() => {
     let isMounted = true
     async function loadRestaurant() {
@@ -57,24 +124,6 @@ export default function OneSignalProvider({ children }: { children?: React.React
     loadRestaurant()
     return () => {
       isMounted = false
-    }
-  }, [])
-
-  // 2. Détecter le support des notifications
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-
-    if (!('Notification' in window) || !('serviceWorker' in navigator)) {
-      setIsSupported(false)
-      setPermission('unsupported')
-      return
-    }
-
-    setIsSupported(true)
-    const currentPermission = Notification.permission as NotificationPermissionState
-    setPermission(currentPermission)
-    if (currentPermission === 'granted') {
-      setIsSubscribed(true)
     }
   }, [])
 
@@ -117,6 +166,11 @@ export default function OneSignalProvider({ children }: { children?: React.React
             const newPerm = isPermitted ? 'granted' : 'denied'
             setPermission(newPerm)
             setIsSubscribed(isPermitted)
+            if (!isPermitted) {
+              setStatusReason('Notifications refusées.')
+            } else {
+              setStatusReason(null)
+            }
           })
 
           OneSignal.Notifications.addEventListener('click', (event: any) => {
@@ -147,56 +201,102 @@ export default function OneSignalProvider({ children }: { children?: React.React
     })
   }, [restaurantId])
 
-  // 5. Demande de permission
+  // 5. Demande de permission directe (dans le geste utilisateur)
   const requestPermission = useCallback(async (): Promise<boolean> => {
     if (typeof window === 'undefined') return false
-    if (!('Notification' in window)) {
+
+    const ua = navigator.userAgent || ''
+    const isIOSDevice =
+      /iPad|iPhone|iPod/.test(ua) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    const standalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone === true
+
+    // Vérification iOS
+    if (isIOSDevice && !standalone) {
       setPermission('unsupported')
+      setStatusReason(
+        "Sur iPhone, installez d'abord l'application sur l'écran d'accueil via le menu Partager de Safari pour activer les notifications."
+      )
+      return false
+    }
+
+    if (!('Notification' in window) || !('serviceWorker' in navigator)) {
+      setPermission('unsupported')
+      setStatusReason('Votre navigateur ne supporte pas les notifications push.')
+      return false
+    }
+
+    // Si déjà refusé
+    if (Notification.permission === 'denied') {
+      setPermission('denied')
+      setStatusReason(
+        "Les notifications sont bloquées par votre navigateur. Cliquez sur l'icône de cadenas 🔒 à gauche de la barre d'adresse pour les autoriser."
+      )
       return false
     }
 
     setIsLoading(true)
+    setStatusReason(null)
+
     try {
-      return await new Promise<boolean>((resolve) => {
+      // APPEL DIRECT NATIVE : Déclenche immédiatement le popup du navigateur
+      const nativePerm = await Notification.requestPermission()
+      const newPerm = nativePerm as NotificationPermissionState
+      setPermission(newPerm)
+      const isPermitted = newPerm === 'granted'
+      setIsSubscribed(isPermitted)
+
+      if (isPermitted) {
+        setStatusReason(null)
+
+        // Enregistrer la souscription dans OneSignal
         window.OneSignalDeferred = window.OneSignalDeferred || []
         window.OneSignalDeferred.push(async function (OneSignal: any) {
           try {
-            await OneSignal.Notifications.requestPermission()
-            const isPermitted = Notification.permission === 'granted'
-            setPermission(Notification.permission as NotificationPermissionState)
-            setIsSubscribed(isPermitted)
-
-            if (isPermitted && restaurantId) {
-              await OneSignal.login(restaurantId)
-
-              try {
-                if ('serviceWorker' in navigator) {
-                  const reg = await navigator.serviceWorker.ready
-                  if (reg && reg.showNotification) {
-                    await reg.showNotification('LOYNIVA Espace Commerce 🔔', {
-                      body: 'Notifications activées ! Vous serez alerté dès qu\'un client s\'inscrit ou demande un cadeau.',
-                      icon: '/icons/icon-192.png',
-                      badge: '/icons/icon-192.png',
-                    })
-                  }
-                }
-              } catch (e) {
-                // Ignore
-              }
+            if (OneSignal.Notifications && OneSignal.Notifications.requestPermission) {
+              await OneSignal.Notifications.requestPermission()
             }
-            resolve(isPermitted)
-          } catch (err) {
-            console.error('Erreur demande permission OneSignal:', err)
-            resolve(false)
-          } finally {
-            setIsLoading(false)
+            if (restaurantId) {
+              await OneSignal.login(restaurantId)
+            }
+          } catch (e) {
+            console.warn('OneSignal sync warning:', e)
           }
         })
-      })
-    } catch (e) {
-      console.error(e)
-      setIsLoading(false)
+
+        // Afficher une notification locale immédiate de confirmation
+        try {
+          if ('serviceWorker' in navigator) {
+            const reg = await navigator.serviceWorker.ready
+            if (reg && reg.showNotification) {
+              await reg.showNotification('LOYNIVA Espace Commerce 🔔', {
+                body: "Notifications activées ! Vous recevrez les alertes dès qu'un client s'inscrit ou demande un cadeau.",
+                icon: '/icons/icon-192.png',
+                badge: '/icons/icon-192.png',
+              })
+            }
+          }
+        } catch (e) {
+          // Ignorer
+        }
+
+        return true
+      } else {
+        if (newPerm === 'denied') {
+          setStatusReason(
+            "Vous avez bloqué les notifications. Pour les réactiver, cliquez sur le cadenas 🔒 dans la barre d'adresse du navigateur."
+          )
+        }
+        return false
+      }
+    } catch (err: any) {
+      console.error('Erreur demande permission:', err)
+      setStatusReason(err?.message || "Erreur lors de l'activation des notifications")
       return false
+    } finally {
+      setIsLoading(false)
     }
   }, [restaurantId])
 
@@ -225,7 +325,7 @@ export default function OneSignalProvider({ children }: { children?: React.React
       }
 
       if (!res.ok) {
-        return { success: false, message: data.error || 'Erreur d\'envoi' }
+        return { success: false, message: data.error || "Erreur d'envoi" }
       }
       return { success: true }
     } catch (err: any) {
@@ -243,6 +343,10 @@ export default function OneSignalProvider({ children }: { children?: React.React
         isSubscribed,
         isLoading,
         isTesting,
+        isStandalone,
+        isSecureContext,
+        platform,
+        statusReason,
         restaurantId,
         restaurantName,
         requestPermission,

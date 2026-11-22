@@ -9,3 +9,4 @@ export async function getRestaurantClient() {
     return null
   }
 }
+
