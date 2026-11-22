@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/lib/theme";
-
+import OneSignalProvider from "@/components/OneSignalProvider";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 
 export const metadata: Metadata = {
@@ -43,8 +43,10 @@ export default function RootLayout({
     <html lang="fr" className="h-full antialiased" suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
         <ThemeProvider>
-          {children}
-          <ServiceWorkerRegister />
+          <OneSignalProvider>
+            {children}
+            <ServiceWorkerRegister />
+          </OneSignalProvider>
         </ThemeProvider>
       </body>
     </html>

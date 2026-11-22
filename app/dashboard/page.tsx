@@ -2,6 +2,7 @@ import { getRestaurant, getToken } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import LogoutButton from '@/components/LogoutButton'
+import MerchantNotificationBanner from '@/components/MerchantNotificationBanner'
 
 export default async function DashboardPage() {
   const commerce = await getRestaurant()
@@ -51,6 +52,9 @@ export default async function DashboardPage() {
           <LogoutButton />
         </div>
       </div>
+
+      {/* Push Notifications for Merchant (Nouveaux clients, demandes cadeaux, etc.) */}
+      <MerchantNotificationBanner />
 
       {/* KPI Stats */}
       {stats && (
