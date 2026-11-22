@@ -59,41 +59,73 @@ export default async function DashboardPage() {
       {/* KPI Stats */}
       {stats && (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-surface p-5 shadow-xs">
-            <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-15 blur-xl" style={{ background: brandColor }} />
-            <div className="relative mb-3 h-1 w-7 rounded-full" style={{ backgroundColor: brandColor }} />
+          <Link
+            href="/dashboard/clients"
+            className="group relative overflow-hidden rounded-2xl border border-border-subtle bg-surface p-5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md hover:border-border active:scale-[0.99] block cursor-pointer"
+          >
+            <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-15 blur-xl group-hover:opacity-25 transition-opacity" style={{ background: brandColor }} />
+            <div className="flex items-center justify-between relative mb-3">
+              <div className="h-1 w-7 rounded-full" style={{ backgroundColor: brandColor }} />
+              <span className="text-[11px] font-semibold text-text-muted opacity-0 group-hover:opacity-100 transition-opacity">
+                Voir →
+              </span>
+            </div>
             <p className="relative text-xs font-semibold uppercase tracking-wider text-text-muted">Membres inscrits</p>
             <p className="relative mt-1 font-display text-3xl font-extrabold text-foreground">
               {stats.totalCards}
             </p>
-          </div>
+          </Link>
 
-          <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-surface p-5 shadow-xs">
-            <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-15 blur-xl" style={{ background: '#4F9DCE' }} />
-            <div className="relative mb-3 h-1 w-7 rounded-full bg-[#4F9DCE]" />
+          <Link
+            href="/dashboard/codes"
+            className="group relative overflow-hidden rounded-2xl border border-border-subtle bg-surface p-5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md hover:border-border active:scale-[0.99] block cursor-pointer"
+          >
+            <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-15 blur-xl group-hover:opacity-25 transition-opacity" style={{ background: '#4F9DCE' }} />
+            <div className="flex items-center justify-between relative mb-3">
+              <div className="h-1 w-7 rounded-full bg-[#4F9DCE]" />
+              <span className="text-[11px] font-semibold text-text-muted opacity-0 group-hover:opacity-100 transition-opacity">
+                Voir →
+              </span>
+            </div>
             <p className="relative text-xs font-semibold uppercase tracking-wider text-text-muted">Transactions</p>
             <p className="relative mt-1 font-display text-3xl font-extrabold text-foreground">
               {stats.totalTransactions}
             </p>
-          </div>
+          </Link>
 
-          <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-surface p-5 shadow-xs">
-            <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-15 blur-xl" style={{ background: '#16845B' }} />
-            <div className="relative mb-3 h-1 w-7 rounded-full bg-[#16845B]" />
+          <Link
+            href="/dashboard/redemptions"
+            className="group relative overflow-hidden rounded-2xl border border-border-subtle bg-surface p-5 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md hover:border-border active:scale-[0.99] block cursor-pointer"
+          >
+            <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full opacity-15 blur-xl group-hover:opacity-25 transition-opacity" style={{ background: '#16845B' }} />
+            <div className="flex items-center justify-between relative mb-3">
+              <div className="h-1 w-7 rounded-full bg-[#16845B]" />
+              <span className="text-[11px] font-semibold text-text-muted opacity-0 group-hover:opacity-100 transition-opacity">
+                Gérer →
+              </span>
+            </div>
             <p className="relative text-xs font-semibold uppercase tracking-wider text-text-muted">Demandes en cours</p>
             <p className="relative mt-1 font-display text-3xl font-extrabold text-foreground">
               {stats.pendingRedemptions}
             </p>
-          </div>
+          </Link>
 
-          <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-gradient-to-br from-[#102A43] to-[#1A3E61] p-5 text-white shadow-xs">
-            <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-[#4F9DCE]/30 blur-xl" />
-            <div className="relative mb-3 h-1 w-7 rounded-full bg-[#4F9DCE]" />
+          <Link
+            href="/dashboard/qr-code"
+            className="group relative overflow-hidden rounded-2xl border border-border-subtle bg-gradient-to-br from-[#102A43] to-[#1A3E61] p-5 text-white shadow-xs transition-all duration-200 hover:-translate-y-1 hover:shadow-md active:scale-[0.99] block cursor-pointer"
+          >
+            <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-[#4F9DCE]/30 blur-xl group-hover:opacity-40 transition-opacity" />
+            <div className="flex items-center justify-between relative mb-3">
+              <div className="h-1 w-7 rounded-full bg-[#4F9DCE]" />
+              <span className="text-[11px] font-semibold text-[#D8E0E8] opacity-0 group-hover:opacity-100 transition-opacity">
+                Ouvrir →
+              </span>
+            </div>
             <p className="relative text-xs font-semibold uppercase tracking-wider text-[#D8E0E8]">Code QR comptoir</p>
             <p className="relative mt-1 truncate font-display text-sm font-bold text-white tracking-wide">
               {commerce.qrCodeToken}
             </p>
-          </div>
+          </Link>
         </div>
       )}
 
