@@ -13,7 +13,7 @@ export default async function CodesPage() {
           Crédit de points
         </h1>
         <p className="mt-1 text-sm text-text-muted">
-          Créditez directement les points sur la carte LOYNIVA du client après son achat
+          Créditez directement les points sur la carte Fidelity du client après son achat
         </p>
       </div>
 

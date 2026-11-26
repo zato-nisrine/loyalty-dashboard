@@ -36,7 +36,7 @@ function HeroCard({ variant }: { variant: 'front' | 'back' }) {
               L
             </div>
             <div>
-              <p className="font-display text-sm font-bold tracking-tight">LOYNIVA PASS</p>
+              <p className="font-display text-sm font-bold tracking-tight">FIDELITY PASS</p>
               <p className="text-[10px] text-[#D8E0E8] font-normal">Chaque visite compte</p>
             </div>
           </div>
@@ -263,7 +263,7 @@ export default function Home() {
               },
               {
                 num: '02',
-                title: 'Imprimez votre QR Code LOYNIVA',
+                title: 'Imprimez votre QR Code Fidelity',
                 desc: 'Placez le code sur votre comptoir ou sur une tablette. Vos clients le scannent en une seconde.',
               },
               {
@@ -405,7 +405,7 @@ export default function Home() {
               Prêt à faire de chaque visite un succès ?
             </h2>
             <p className="mt-3 text-sm sm:text-base text-[#D8E0E8]">
-              Rejoignez les commerces qui utilisent <strong>LOYNIVA</strong> pour rapprocher et fidéliser leurs clients au quotidien.
+              Rejoignez les commerces qui utilisent <strong>Fidelity</strong> pour rapprocher et fidéliser leurs clients au quotidien.
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Link
@@ -430,7 +430,7 @@ export default function Home() {
             <LoynivaLogo size="sm" showTagline={false} />
           </div>
           <p className="mt-4 text-xs text-[#5B7286] sm:mt-0 dark:text-[#8FA6BA]">
-            © {new Date().getFullYear()} LOYNIVA. Plateforme SaaS de fidélité et de relation client. « Chaque visite compte. »
+            © {new Date().getFullYear()} Fidelity. Plateforme SaaS de fidélité et de relation client. « Chaque visite compte. »
           </p>
         </footer>
       </div>

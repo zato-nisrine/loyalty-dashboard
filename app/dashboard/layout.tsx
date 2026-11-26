@@ -132,7 +132,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         {/* Footer info */}
         <div className="mt-auto pt-6 border-t border-[#D8E0E8] dark:border-white/10">
           <p className="text-[11px] text-[#5B7286] font-medium text-center dark:text-[#8FA6BA]">
-            LOYNIVA • Chaque visite compte.
+            Fidelity • Chaque visite compte.
           </p>
         </div>
       </aside>

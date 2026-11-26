@@ -29,7 +29,7 @@ export default async function CampaignsPage() {
         <div className="rounded-2xl border border-dashed border-[#D8E0E8] bg-surface p-8 text-center dark:border-white/10">
           <p className="font-display text-base font-semibold text-foreground">Fonctionnalité réservée au plan Pro</p>
           <p className="mt-1 text-sm text-text-muted">
-            Passez au plan Pro pour envoyer des campagnes marketing directes à tous vos clients LOYNIVA.
+            Passez au plan Pro pour envoyer des campagnes marketing directes à tous vos clients Fidelity.
           </p>
         </div>
       ) : (

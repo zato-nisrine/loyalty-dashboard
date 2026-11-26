@@ -31,7 +31,7 @@ export default async function AdminDashboardPage() {
         <h1 className="font-display text-[28px] sm:text-[32px] font-bold text-foreground tracking-tight">
           Vue globale
         </h1>
-        <p className="mt-1 text-sm text-text-muted">Tableau de bord administrateur LOYNIVA</p>
+        <p className="mt-1 text-sm text-text-muted">Tableau de bord administrateur Fidelity</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">

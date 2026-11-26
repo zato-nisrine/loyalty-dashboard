@@ -42,7 +42,7 @@ export default function AdminLoginPage() {
           <h1 className="font-display text-2xl font-bold text-[#102A43] dark:text-white">
             Espace administrateur
           </h1>
-          <p className="mt-1 text-xs text-[#5B7286] dark:text-[#8FA6BA]">Accès réservé LOYNIVA</p>
+          <p className="mt-1 text-xs text-[#5B7286] dark:text-[#8FA6BA]">Accès réservé Fidelity</p>
         </div>
 
         <div className="space-y-4">

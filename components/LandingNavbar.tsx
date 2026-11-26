@@ -147,7 +147,7 @@ export default function LandingNavbar() {
                 <ThemeToggle />
               </div>
               <p className="text-[11px] text-center text-text-muted">
-                LOYNIVA • Chaque visite compte.
+                Fidelity • Chaque visite compte.
               </p>
             </div>
           </aside>

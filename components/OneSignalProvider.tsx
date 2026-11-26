@@ -271,7 +271,7 @@ export default function OneSignalProvider({ children }: { children?: React.React
           if ('serviceWorker' in navigator) {
             const reg = await navigator.serviceWorker.ready
             if (reg && reg.showNotification) {
-              await reg.showNotification('LOYNIVA Espace Commerce 🔔', {
+              await reg.showNotification('Fidelity Espace Commerce 🔔', {
                 body: "Notifications activées ! Vous recevrez les alertes dès qu'un client s'inscrit ou demande un cadeau.",
                 icon: '/icons/icon-192.png',
                 badge: '/icons/icon-192.png',
@@ -313,7 +313,7 @@ export default function OneSignalProvider({ children }: { children?: React.React
         if ('serviceWorker' in navigator && Notification.permission === 'granted') {
           const reg = await navigator.serviceWorker.ready
           if (reg && reg.showNotification) {
-            await reg.showNotification('LOYNIVA Commerce — Test 🔔', {
+            await reg.showNotification('Fidelity Commerce — Test 🔔', {
               body: 'Vos alertes commerçant fonctionnent parfaitement sur cet appareil.',
               icon: '/icons/icon-192.png',
               badge: '/icons/icon-192.png',

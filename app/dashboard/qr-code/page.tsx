@@ -12,7 +12,7 @@ export default async function QrCodePage() {
     <div className="space-y-6">
       <div>
         <h1 className="font-display text-[28px] sm:text-[32px] font-bold text-foreground tracking-tight">
-          Mon QR code LOYNIVA
+          Mon QR code Fidelity
         </h1>
         <p className="mt-1 text-sm text-text-muted">
           Affichez ce code en caisse pour que vos clients créent instantanément leur carte de fidélité

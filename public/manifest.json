@@ -1,7 +1,7 @@
 {
-  "name": "LOYNIVA — Espace commerce",
-  "short_name": "LOYNIVA",
-  "description": "Gérez votre programme de fidélité, vos récompenses et vos campagnes avec LOYNIVA.",
+  "name": "Fidelity — Espace commerce",
+  "short_name": "Fidelity",
+  "description": "Gérez votre programme de fidélité, vos récompenses et vos campagnes avec Fidelity.",
   "id": "/",
   "start_url": "/dashboard",
   "scope": "/",

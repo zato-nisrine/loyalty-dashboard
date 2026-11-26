@@ -31,7 +31,7 @@ export default async function DashboardPage() {
             >
               Plan {commerce.plan}
             </span>
-            <span className="text-xs text-text-muted">• Espace de gestion LOYNIVA</span>
+            <span className="text-xs text-text-muted">• Espace de gestion Fidelity</span>
           </div>
         </div>
 

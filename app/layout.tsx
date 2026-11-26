@@ -5,13 +5,13 @@ import OneSignalProvider from "@/components/OneSignalProvider";
 import ServiceWorkerRegister from "@/components/ServiceWorkerRegister";
 
 export const metadata: Metadata = {
-  title: "LOYNIVA — Chaque visite compte",
+  title: "Fidelity — Chaque visite compte",
   description: "Plateforme SaaS de fidélité et de relation client. La confiance qui rapproche.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "LOYNIVA",
+    title: "Fidelity",
   },
   icons: {
     icon: [

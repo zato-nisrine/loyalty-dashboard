@@ -56,7 +56,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md rounded-2xl border border-[#D8E0E8] bg-white p-8 shadow-sm dark:border-white/10 dark:bg-[#102A43]">
         <div className="mb-6">
           <h1 className="font-display text-2xl font-bold tracking-tight text-[#102A43] dark:text-white">
-            Créer un compte LOYNIVA
+            Créer un compte Fidelity
           </h1>
           <p className="mt-1 text-sm text-[#5B7286] dark:text-[#8FA6BA]">
             7 jours d'essai gratuit • Sans carte bancaire
@@ -152,7 +152,7 @@ export default function RegisterPage() {
       </div>
 
       <p className="mt-8 text-center text-xs text-[#5B7286] dark:text-[#8FA6BA]">
-        LOYNIVA — Chaque visite compte.
+        Fidelity — Chaque visite compte.
       </p>
     </div>
   )

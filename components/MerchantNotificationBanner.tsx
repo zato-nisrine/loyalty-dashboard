@@ -135,7 +135,7 @@ export default function MerchantNotificationBanner() {
               <ol className="text-[11px] sm:text-xs list-decimal list-inside space-y-1 text-text-muted">
                 <li>Appuyez sur le bouton de <strong>Partage ⎋</strong> (icône avec flèche vers le haut en bas de Safari).</li>
                 <li>Faites défiler vers le bas et touchez <strong>« Sur l'écran d'accueil ⊞ »</strong>.</li>
-                <li>Ouvrez l'icône <strong>LOYNIVA</strong> depuis votre écran d'accueil et activez les alertes.</li>
+                <li>Ouvrez l'icône <strong>Fidelity</strong> depuis votre écran d'accueil et activez les alertes.</li>
               </ol>
             </div>
           </div>

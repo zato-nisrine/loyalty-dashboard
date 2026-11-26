@@ -118,7 +118,7 @@ export default function LoginPage() {
       </div>
 
       <p className="mt-8 text-center text-xs text-[#5B7286] dark:text-[#8FA6BA]">
-        LOYNIVA — La confiance qui rapproche.
+        Fidelity — La confiance qui rapproche.
       </p>
     </div>
   )
